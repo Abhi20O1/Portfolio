@@ -211,9 +211,9 @@ export default function App() {
           </div>
           
           <div className="bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col items-center justify-center text-center relative overflow-hidden group">
-            <div className="absolute inset-0 bg-[url('https://api.maptiler.com/maps/basic-v2/static/78.4867,17.3850,11/400x300.png?key=get_your_own_OpIi9ZULNHzrESv6T2vL')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity mix-blend-luminosity"></div>
+            <div className="absolute inset-0 bg-[url('https://api.maptiler.com/maps/basic-v2/static/77.2090,28.6139,11/400x300.png?key=get_your_own_OpIi9ZULNHzrESv6T2vL')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity mix-blend-luminosity"></div>
             <MapPin size={32} className="text-white mb-3 relative z-10" />
-            <p className="text-white font-bold text-lg relative z-10">Hyderabad, India</p>
+            <p className="text-white font-bold text-lg relative z-10">New Delhi, India</p>
             <p className="text-zinc-400 text-sm relative z-10">Open to Remote</p>
           </div>
         </div>
@@ -260,10 +260,10 @@ export default function App() {
           )}
         </div>
 
-        {/* GITHUB STATS - Spans 6 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-6 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center overflow-hidden">
+        {/* GITHUB STATS - Spans 4 cols */}
+        <div className="col-span-1 md:col-span-6 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center overflow-hidden">
           <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-6 w-full text-left">Contributions</h3>
-          <div className="scale-90 sm:scale-100 origin-left max-w-full overflow-x-auto no-scrollbar">
+          <div className="scale-[0.8] sm:scale-90 origin-left max-w-full overflow-x-auto no-scrollbar">
             <GitHubCalendar 
               username="Abhi20O1" 
               colorScheme="dark"
@@ -275,8 +275,20 @@ export default function App() {
           </div>
         </div>
 
-        {/* LEETCODE - Spans 6 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-6 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
+        {/* GITHUB STREAK - Spans 4 cols */}
+        <div className="col-span-1 md:col-span-6 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
+          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-6 w-full text-left">GitHub Streak</h3>
+          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="w-full flex justify-center hover:scale-[1.02] transition-transform">
+            <img 
+              src="https://github-readme-streak-stats.herokuapp.com/?user=Abhi20O1&theme=dark&hide_border=true&background=00000000&ring=3b82f6&fire=3b82f6&currStreakNum=ffffff&sideNums=ffffff&currStreakLabel=9ca3af&sideLabels=9ca3af&dates=9ca3af" 
+              alt="GitHub Streak" 
+              className="w-full max-w-[450px] rounded-xl shadow-lg opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </a>
+        </div>
+
+        {/* LEETCODE - Spans 4 cols */}
+        <div className="col-span-1 md:col-span-6 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
           <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-6 w-full text-left">LeetCode</h3>
           <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="w-full flex justify-center hover:scale-[1.02] transition-transform">
             <img 
