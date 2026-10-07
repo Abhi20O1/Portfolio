@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
-import { Mail, ArrowUpRight, MessageCircle, MapPin, Code2, BrainCircuit, Bot } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, Code2, BrainCircuit, Bot } from 'lucide-react';
 
 function InteractiveBackground() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -123,57 +123,76 @@ export default function App() {
       </nav>
 
       {/* Bento Grid Container */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4 auto-rows-min">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-min">
         
-        {/* HERO CARD - Spans 8 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-8 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-10 flex flex-col justify-between hover:bg-zinc-900/40 transition-colors shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -z-10 group-hover:bg-blue-500/20 transition-colors"></div>
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6 border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="text-[11px] text-emerald-300 font-semibold tracking-wide uppercase">Available for work</span>
+        {/* HERO & CONNECT - 12 cols */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-12 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-12 flex flex-col hover:bg-zinc-900/40 transition-colors shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -z-10 group-hover:bg-blue-500/20 transition-colors"></div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12 mb-8">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6 border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-[11px] text-emerald-300 font-semibold tracking-wide uppercase">Available for work</span>
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tighter mb-4 text-white">
+                Abhishek Singh
+              </h1>
+              <h2 className="text-xl sm:text-3xl text-zinc-400 font-medium tracking-tight mb-6">
+                Data Scientist & AI Engineer
+              </h2>
+              <p className="text-zinc-300/80 text-[16px] sm:text-[18px] leading-relaxed max-w-2xl">
+                Building scalable ML systems, computer vision solutions, and Gen AI applications with Python, TensorFlow, and AWS.
+              </p>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter mb-4 text-white">
-              Abhishek Singh
-            </h1>
-            <h2 className="text-xl sm:text-2xl text-zinc-400 font-medium tracking-tight mb-6">
-              Data Scientist & AI Engineer
-            </h2>
-            <p className="text-zinc-300/80 text-[16px] leading-relaxed max-w-xl">
-              Building scalable ML systems, computer vision solutions, and Gen AI applications with Python, TensorFlow, and AWS.
-            </p>
+            <div className="shrink-0 relative">
+              <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full -z-10"></div>
+              <img src="/robo.png" alt="Abhishek" className="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-3xl border border-white/10 shadow-2xl transform transition-transform group-hover:scale-105" />
+            </div>
+          </div>
+          
+          <div className="w-full h-px bg-white/10 my-8"></div>
+          
+          <div className="flex flex-wrap gap-4 items-center">
+            <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mr-2">Connect:</h3>
+            <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-zinc-200 text-sm font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub
+            </a>
+            <a href="https://linkedin.com/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-zinc-200 text-sm font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn
+            </a>
+            <a href="mailto:abhi28031@gmail.com" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-zinc-200 text-sm font-medium">
+              <Mail size={16} /> Email
+            </a>
           </div>
         </div>
 
-        {/* PROFILE / CONNECT - Spans 4 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 flex flex-col gap-4 hover:bg-zinc-900/40 transition-colors shadow-2xl">
-          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-2">Connect</h3>
-          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group">
-            <div className="flex items-center gap-3 text-zinc-200 font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</div>
-            <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-white transition-colors" />
-          </a>
-          <a href="https://linkedin.com/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group">
-            <div className="flex items-center gap-3 text-zinc-200 font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</div>
-            <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-white transition-colors" />
-          </a>
-          <a href="mailto:abhi28031@gmail.com" className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group">
-            <div className="flex items-center gap-3 text-zinc-200 font-medium"><Mail size={20} /> Email</div>
-            <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-white transition-colors" />
-          </a>
+        {/* TECH STACK - 12 cols */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-12 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center">
+          <div className="flex items-center gap-2 mb-6 text-zinc-400">
+            <Code2 size={18} />
+            <h3 className="text-sm font-semibold uppercase tracking-wider">Tech Stack</h3>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {['Python', 'TensorFlow', 'PyTorch', 'AWS SageMaker', 'OpenCV', 'YOLO', 'Flask', 'SQL', 'C++', 'JavaScript', 'Azure', 'Git'].map(skill => (
+              <span key={skill} className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-zinc-200 text-[15px] font-medium hover:bg-white/10 transition-colors cursor-default">
+                {skill}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* EXPERIENCE - Spans 5 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-5 row-span-2 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 flex flex-col hover:bg-zinc-900/40 transition-colors shadow-2xl">
+        {/* EXPERIENCE - 6 cols */}
+        <div className="col-span-1 md:col-span-1 lg:col-span-6 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 flex flex-col hover:bg-zinc-900/40 transition-colors shadow-2xl">
           <div className="flex items-center gap-2 mb-6 text-zinc-400">
             <BrainCircuit size={18} />
             <h3 className="text-sm font-semibold uppercase tracking-wider">Experience</h3>
           </div>
           
-          <div className="relative pl-6 border-l border-white/10 flex-1">
+          <div className="relative pl-6 border-l border-white/10 flex-1 mt-2">
             <div className="absolute w-3 h-3 bg-white/20 border border-white/40 rounded-full -left-[6.5px] top-1"></div>
             <h4 className="text-lg font-bold text-white mb-1">Arcap REIT AI</h4>
-            <p className="text-sm text-blue-400 font-medium mb-3">Data Scientist Trainee <span className="text-zinc-500 ml-2">Aug 2025 - Jan 2026</span></p>
-            <ul className="space-y-3 text-[14px] text-zinc-400">
+            <p className="text-sm text-blue-400 font-medium mb-4">Data Scientist Trainee <span className="text-zinc-500 ml-2">Aug 2025 - Jan 2026</span></p>
+            <ul className="space-y-3 text-[14.5px] text-zinc-400">
               <li><strong className="text-zinc-200">Pipelines:</strong> Dev automated data cleaning with Python/R, reducing prep time 30%.</li>
               <li><strong className="text-zinc-200">ML Architecture:</strong> Designed end-to-end cloud AI using AWS (S3, SageMaker) & Azure.</li>
               <li><strong className="text-zinc-200">Deployment:</strong> Deployed Random Forest & CNN models via Flask.</li>
@@ -181,45 +200,25 @@ export default function App() {
           </div>
         </div>
 
-        {/* SKILLS SCROLLER - Spans 7 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-7 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 overflow-hidden hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center">
-          <div className="flex items-center gap-2 mb-6 text-zinc-400">
-            <Code2 size={18} />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Tech Stack</h3>
+        {/* EDUCATION - 6 cols */}
+        <div className="col-span-1 md:col-span-1 lg:col-span-6 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col">
+          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-8">Education</h3>
+          <div className="relative pl-6 border-l border-white/10 mb-10">
+            <div className="absolute w-3 h-3 bg-white/20 border border-white/40 rounded-full -left-[6.5px] top-1"></div>
+            <p className="text-white font-bold text-lg mb-1">IIT Guwahati & Daksh Gurukul</p>
+            <p className="text-zinc-400 text-sm">Data Science</p>
+            <p className="text-zinc-500 text-xs mt-1">Mar 2025 – May 2026</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {['Python', 'TensorFlow', 'PyTorch', 'AWS SageMaker', 'OpenCV', 'YOLO', 'Flask', 'SQL', 'C++', 'JavaScript', 'Azure', 'Git'].map(skill => (
-              <span key={skill} className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-200 text-sm font-medium hover:bg-white/10 transition-colors cursor-default">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* EDUCATION & LOCATION - Spans 7 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center">
-            <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-4">Education</h3>
-            <div className="mb-4">
-              <p className="text-zinc-100 font-bold text-sm">IIT Guwahati & Daksh Gurukul</p>
-              <p className="text-zinc-400 text-xs mt-1">Data Science (Mar 2025 – May 2026)</p>
-            </div>
-            <div>
-              <p className="text-zinc-100 font-bold text-sm">JSS Academy</p>
-              <p className="text-zinc-400 text-xs mt-1">B.Tech CSE (2020 – 2024)</p>
-            </div>
-          </div>
-          
-          <div className="bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col items-center justify-center text-center relative overflow-hidden group">
-            <div className="absolute inset-0 bg-[url('https://api.maptiler.com/maps/basic-v2/static/77.2090,28.6139,11/400x300.png?key=get_your_own_OpIi9ZULNHzrESv6T2vL')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity mix-blend-luminosity"></div>
-            <MapPin size={32} className="text-white mb-3 relative z-10" />
-            <p className="text-white font-bold text-lg relative z-10">New Delhi, India</p>
-            <p className="text-zinc-400 text-sm relative z-10">Open to Remote</p>
+          <div className="relative pl-6 border-l border-white/10">
+            <div className="absolute w-3 h-3 bg-white/20 border border-white/40 rounded-full -left-[6.5px] top-1"></div>
+            <p className="text-white font-bold text-lg mb-1">JSS Academy</p>
+            <p className="text-zinc-400 text-sm">B.Tech CSE</p>
+            <p className="text-zinc-500 text-xs mt-1">2020 – 2024</p>
           </div>
         </div>
 
-        {/* PROJECTS SECTION - Spans all 12 cols */}
-        <div className="col-span-1 md:col-span-4 lg:col-span-12 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl mt-4">
+        {/* PROJECTS - 12 cols */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-12 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl">
           <div className="flex items-center gap-2 mb-8 text-zinc-400">
             <Bot size={18} />
             <h3 className="text-sm font-semibold uppercase tracking-wider">Featured Projects</h3>
@@ -230,7 +229,7 @@ export default function App() {
               <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.slice(0, 6).map((proj) => (
                 <a 
                   key={proj.id} 
@@ -248,10 +247,10 @@ export default function App() {
                       </span>
                     )}
                   </div>
-                  <h4 className="text-[16px] font-bold mb-2 text-zinc-100 group-hover:text-blue-300 transition-colors line-clamp-1">
+                  <h4 className="text-[17px] font-bold mb-2 text-zinc-100 group-hover:text-blue-300 transition-colors line-clamp-1">
                     {proj.title}
                   </h4>
-                  <p className="text-zinc-400 text-[13px] leading-relaxed flex-1 line-clamp-3">
+                  <p className="text-zinc-400 text-[14px] leading-relaxed flex-1 line-clamp-3">
                     {proj.description}
                   </p>
                 </a>
@@ -260,10 +259,10 @@ export default function App() {
           )}
         </div>
 
-        {/* GITHUB STATS - Spans 4 cols */}
-        <div className="col-span-1 md:col-span-6 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center overflow-hidden">
-          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-6 w-full text-left">Contributions</h3>
-          <div className="scale-[0.8] sm:scale-90 origin-left max-w-full overflow-x-auto no-scrollbar">
+        {/* CONTRIBUTIONS - 12 cols */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-12 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center overflow-hidden">
+          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-8 w-full text-left">GitHub Contributions</h3>
+          <div className="scale-90 sm:scale-100 origin-center max-w-full overflow-x-auto no-scrollbar pb-4">
             <GitHubCalendar 
               username="Abhi20O1" 
               colorScheme="dark"
@@ -275,28 +274,37 @@ export default function App() {
           </div>
         </div>
 
-        {/* GITHUB STREAK - Spans 4 cols */}
-        <div className="col-span-1 md:col-span-6 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
-          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-6 w-full text-left">GitHub Streak</h3>
+        {/* STREAK - 6 cols */}
+        <div className="col-span-1 md:col-span-1 lg:col-span-6 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
+          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-8 w-full text-left">GitHub Streak</h3>
           <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="w-full flex justify-center hover:scale-[1.02] transition-transform">
             <img 
               src="https://github-readme-streak-stats.herokuapp.com/?user=Abhi20O1&theme=dark&hide_border=true&background=00000000&ring=3b82f6&fire=3b82f6&currStreakNum=ffffff&sideNums=ffffff&currStreakLabel=9ca3af&sideLabels=9ca3af&dates=9ca3af" 
               alt="GitHub Streak" 
-              className="w-full max-w-[450px] rounded-xl shadow-lg opacity-90 hover:opacity-100 transition-opacity"
+              className="w-full max-w-[500px] rounded-xl shadow-lg opacity-90 hover:opacity-100 transition-opacity"
             />
           </a>
         </div>
 
-        {/* LEETCODE - Spans 4 cols */}
-        <div className="col-span-1 md:col-span-6 lg:col-span-4 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
-          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-6 w-full text-left">LeetCode</h3>
+        {/* LEETCODE - 6 cols */}
+        <div className="col-span-1 md:col-span-1 lg:col-span-6 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-8 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col justify-center items-center">
+          <h3 className="text-zinc-400 text-sm font-semibold uppercase tracking-wider mb-8 w-full text-left">LeetCode</h3>
           <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="w-full flex justify-center hover:scale-[1.02] transition-transform">
             <img 
               src="https://leetcard.jacoblin.cool/abhi28031?theme=dark&font=Inter&ext=activity" 
               alt="LeetCode Stats" 
-              className="w-full max-w-[450px] rounded-xl shadow-lg border border-white/5 opacity-90 hover:opacity-100 transition-opacity"
+              className="w-full max-w-[500px] rounded-xl shadow-lg border border-white/5 opacity-90 hover:opacity-100 transition-opacity"
             />
           </a>
+        </div>
+
+        {/* LOCATION - 12 cols */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-12 bg-zinc-900/30 backdrop-blur-lg border border-white/10 rounded-3xl p-12 hover:bg-zinc-900/40 transition-colors shadow-2xl flex flex-col items-center justify-center text-center relative overflow-hidden group min-h-[350px]">
+          <div className="absolute inset-0 bg-[url('https://api.maptiler.com/maps/basic-v2/static/77.2090,28.6139,11/1200x500.png?key=get_your_own_OpIi9ZULNHzrESv6T2vL')] bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity mix-blend-luminosity"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/50 to-zinc-950/10"></div>
+          <MapPin size={48} className="text-white mb-4 relative z-10 drop-shadow-lg" />
+          <p className="text-white font-bold text-3xl sm:text-5xl relative z-10 mb-3 drop-shadow-lg">New Delhi, India</p>
+          <p className="text-zinc-300 text-lg sm:text-xl relative z-10 font-medium drop-shadow-md">Open to Remote Opportunities</p>
         </div>
 
       </main>
