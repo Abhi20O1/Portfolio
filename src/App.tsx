@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
-import { Mail, MessageCircle, MapPin, Code2, Bot, ExternalLink, ArrowRight, Network, Database, LineChart, Cpu, Terminal, Activity, Send } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, Code2, Bot, ExternalLink, ArrowRight, Network, Database, LineChart, Cpu, Terminal, Activity, Send, FileText } from 'lucide-react';
 
 function InteractiveBackground() {
   return (
@@ -141,8 +141,8 @@ export default function App() {
       {/* Navbar (Minimal & Floating) */}
       <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 w-[95%] sm:w-[90%] max-w-4xl glass-panel rounded-full border border-white/10 animate-fade-in-up shadow-2xl backdrop-blur-xl bg-zinc-950/80">
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-blue-500 to-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-            <span className="text-[13px] sm:text-[14px] font-bold tracking-tight text-white">AS</span>
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-zinc-900/50">
+            <img src="/Logo.png" alt="Abhishek Singh Logo" className="w-full h-full object-cover" />
           </div>
           <span className="text-sm font-semibold text-zinc-200 hidden sm:block tracking-wide">Abhishek Singh</span>
         </div>
@@ -194,11 +194,14 @@ export default function App() {
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4 items-center mt-auto">
-              <a href="mailto:abhi28031@gmail.com" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+              <a href="mailto:abhi28031@gmail.com" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]">
                 <Database size={16} className="sm:w-[18px] sm:h-[18px]" /> Contact Me
               </a>
-              <a href="https://linkedin.com/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/20 transition-all text-zinc-200 text-sm font-medium backdrop-blur-md">
-                LinkedIn <ArrowRight size={14} className="opacity-50 sm:w-4 sm:h-4" />
+              <a href="/resume.pdf" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 transition-all text-sm font-medium backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]">
+                <FileText size={16} className="sm:w-[18px] sm:h-[18px]" /> Resume
+              </a>
+              <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/20 transition-all text-zinc-200 text-sm font-medium backdrop-blur-md hover:border-white/30">
+                LinkedIn <ArrowRight size={14} className="opacity-50 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
           </div>
@@ -322,7 +325,7 @@ export default function App() {
             <div className="absolute w-3 h-3 sm:w-4 sm:h-4 bg-zinc-950 border-2 border-blue-500 rounded-full -left-[7.5px] sm:-left-[9px] top-1 sm:top-1.5 shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3">
-              <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap Reit Ai Solution</h4>
+              <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
               <span className="text-zinc-400 text-xs sm:text-sm font-mono mt-2 sm:mt-0 bg-white/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/5 shadow-sm inline-block w-fit">Aug 2025 - Jan 2026</span>
             </div>
 
@@ -379,7 +382,7 @@ export default function App() {
                   key={proj.id}
                   href={proj.html_url !== '#' ? proj.html_url : undefined}
                   target={proj.html_url !== '#' ? "_blank" : undefined}
-                  className="group/card flex flex-col bg-zinc-900/40 rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-white/5 hover:border-white/20 hover:bg-zinc-800/60 transition-all duration-300 shadow-inner relative overflow-hidden h-full"
+                  className="group/card flex flex-col bg-zinc-900/40 rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-white/5 hover:border-cyan-500/30 hover:bg-zinc-800/60 transition-all duration-500 shadow-inner hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden h-full"
                 >
                   <div className="absolute -top-10 -right-10 w-24 sm:w-32 h-24 sm:h-32 bg-white/5 rounded-full blur-[30px] sm:blur-[40px] -z-10 group-hover/card:bg-blue-500/20 transition-colors duration-500"></div>
 
@@ -537,7 +540,7 @@ export default function App() {
         </div>
         <div className="flex gap-3 sm:gap-4">
           <a href="https://github.com/Abhi20O1" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg></a>
-          <a href="https://linkedin.com/" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg></a>
+          <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg></a>
           <a href="mailto:abhi28031@gmail.com" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><Mail className="w-4 h-4 sm:w-5 sm:h-5" /></a>
         </div>
       </footer>
