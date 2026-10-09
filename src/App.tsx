@@ -49,6 +49,35 @@ export default function App() {
   };
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          } else {
+            entry.target.classList.remove("is-visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const observeElements = () => {
+      document.querySelectorAll(".animate-fade-in-up").forEach((el) => {
+        observer.observe(el);
+      });
+    };
+
+    // Small delay to ensure DOM and dynamic projects are rendered
+    const timeoutId = setTimeout(observeElements, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
+  }, [projects]);
+
+  useEffect(() => {
     async function fetchProjects() {
       try {
         const res = await fetch('https://api.github.com/users/Abhi20O1/repos');
@@ -105,7 +134,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans selection:bg-white/20 selection:text-white pb-12 sm:pb-24">
+    <div className="min-h-screen font-sans selection:bg-white/20 selection:text-white pb-4 sm:pb-6">
       <InteractiveBackground />
       <div className="noise-texture"></div>
 
@@ -502,7 +531,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 mt-6 sm:mt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 animate-fade-in-up stagger-6 text-center sm:text-left relative">
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2 mt-6 sm:mt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-3 animate-fade-in-up text-center sm:text-left relative">
         <div className="flex flex-col gap-2 items-center sm:items-start">
           <p className="text-zinc-500 text-xs sm:text-sm font-medium">© {new Date().getFullYear()} Abhishek Singh. All rights reserved.</p>
         </div>
