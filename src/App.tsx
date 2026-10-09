@@ -1,43 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
 import { Mail, MessageCircle, MapPin, Code2, Bot, ExternalLink, ArrowRight, Network, Database, LineChart, Cpu, Terminal, Activity, Send } from 'lucide-react';
 
 function InteractiveBackground() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    let animationFrameId: number;
-    let targetTime = 0;
-
-    const handleMove = (clientX: number) => {
-      if (videoRef.current && videoRef.current.duration) {
-        const xPercent = Math.max(0, Math.min(1, clientX / window.innerWidth));
-        targetTime = xPercent * videoRef.current.duration;
-      }
-    };
-
-    const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX);
-    const handleTouchMove = (e: TouchEvent) => handleMove(e.touches[0].clientX);
-
-    const updateVideoTime = () => {
-      if (videoRef.current && !isNaN(targetTime)) {
-        const currentTime = videoRef.current.currentTime;
-        videoRef.current.currentTime = currentTime + (targetTime - currentTime) * 0.1;
-      }
-      animationFrameId = requestAnimationFrame(updateVideoTime);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    animationFrameId = requestAnimationFrame(updateVideoTime);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden bg-zinc-950 pointer-events-none">
       {/* Technical Grid Overlay for Data Science Vibe */}
@@ -48,14 +13,7 @@ function InteractiveBackground() {
       <div className="absolute bottom-[10%] sm:bottom-[20%] right-[5%] sm:right-[10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-blue-600/10 rounded-full blur-[100px] sm:blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }}></div>
       <div className="absolute top-[30%] sm:top-[40%] left-[50%] sm:left-[60%] w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] bg-purple-600/10 rounded-full blur-[80px] sm:blur-[100px] animate-pulse-glow" style={{ animationDelay: '4s' }}></div>
 
-      <video
-        ref={videoRef}
-        src="/kling_20261008_VIDEO_animate_339_0.mp4"
-        className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen"
-        muted
-        playsInline
-        preload="auto"
-      />
+
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/80 to-zinc-950"></div>
     </div>
   );
@@ -64,17 +22,30 @@ function InteractiveBackground() {
 export default function App() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
+  const [formError, setFormError] = useState("");
 
   const handleEmailSubmit = () => {
-    if (!contactMessage) return alert("Please enter a message!");
-    window.location.href = `mailto:abhi28031@gmail.com?subject=Portfolio Contact from ${contactEmail || 'Guest'}&body=${encodeURIComponent(contactMessage)}`;
+    if (!contactName) return setFormError("Please enter your name!");
+    if (!contactEmail) return setFormError("Please enter your email!");
+    if (!contactMessage) return setFormError("Please enter a message!");
+    setFormError("");
+
+    const emailStr = contactEmail ? ` (${contactEmail})` : "";
+    const subject = `Portfolio Contact from ${contactName}${emailStr}`;
+    window.location.href = `mailto:abhi28031@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(contactMessage)}`;
   };
 
   const handleWhatsAppSubmit = () => {
-    if (!contactMessage) return alert("Please enter a message!");
-    window.open(`https://wa.me/918126684451?text=${encodeURIComponent(`Hi, ${contactEmail ? `my email is ${contactEmail}` : 'I am reaching out from your portfolio'}. \n\n${contactMessage}`)}`, '_blank');
+    if (!contactName) return setFormError("Please enter your name!");
+    if (!contactEmail) return setFormError("Please enter your email!");
+    if (!contactMessage) return setFormError("Please enter a message!");
+    setFormError("");
+
+    const intro = `Hi, I am ${contactName}${contactEmail ? ` (${contactEmail})` : ''} reaching out from your portfolio.`;
+    window.open(`https://wa.me/918126684451?text=${encodeURIComponent(`${intro}\n\n${contactMessage}`)}`, '_blank');
   };
 
   useEffect(() => {
@@ -466,16 +437,32 @@ export default function App() {
 
             <div className="flex-[1.5] w-full">
               <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="flex flex-col gap-4">
+                {formError && (
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2.5 rounded-xl text-sm font-medium animate-fade-in-up">
+                    {formError}
+                  </div>
+                )}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <label htmlFor="name" className="sr-only">Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      value={contactName}
+                      onChange={(e) => { setContactName(e.target.value); if (formError) setFormError(""); }}
+                      placeholder="Your name"
+                      className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner ${formError === "Please enter your name!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-cyan-500/50 focus:ring-cyan-500/50"}`}
+                    />
+                  </div>
                   <div className="flex-1">
                     <label htmlFor="email" className="sr-only">Email</label>
                     <input
                       type="email"
                       id="email"
                       value={contactEmail}
-                      onChange={(e) => setContactEmail(e.target.value)}
-                      placeholder="Your email address (optional)"
-                      className="w-full bg-zinc-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all shadow-inner"
+                      onChange={(e) => { setContactEmail(e.target.value); if (formError) setFormError(""); }}
+                      placeholder="Your email"
+                      className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner ${formError === "Please enter your email!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-cyan-500/50 focus:ring-cyan-500/50"}`}
                     />
                   </div>
                 </div>
@@ -485,9 +472,9 @@ export default function App() {
                     id="message"
                     rows={4}
                     value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
+                    onChange={(e) => { setContactMessage(e.target.value); if (formError) setFormError(""); }}
                     placeholder="What would you like to discuss?"
-                    className="w-full bg-zinc-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all shadow-inner resize-none"
+                    className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner resize-none ${formError === "Please enter a message!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-cyan-500/50 focus:ring-cyan-500/50"}`}
                     required
                   ></textarea>
                 </div>
