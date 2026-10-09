@@ -62,29 +62,34 @@ body {
 
 /* Glassmorphism Utilities */
 .glass-panel {
-  background: rgba(24, 24, 27, 0.3);
+  background: rgba(9, 9, 11, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(6, 182, 212, 0.02);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-panel:hover {
-  background: rgba(24, 24, 27, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  background: rgba(9, 9, 11, 0.8);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(6, 182, 212, 0.05);
 }
 
 .glow-text {
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
 }
 
 .gradient-text {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  background-image: linear-gradient(135deg, #ffffff 0%, #22d3ee 100%);
+}
+
+.terminal-text {
+  font-family: var(--font-mono);
+  color: #22d3ee;
 }
 
 /* Animations */
