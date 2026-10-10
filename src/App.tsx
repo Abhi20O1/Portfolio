@@ -309,20 +309,20 @@ export default function App() {
               <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Education</h3>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px]">IIT Guwahati & Daksh Gurukul</p>
-                <div className="flex justify-between items-center mt-1 sm:mt-1.5">
+                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">IIT Guwahati & Daksh Gurukul</p>
+                <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
                   <p className="text-zinc-400 text-xs sm:text-sm">Data Science</p>
-                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5">2025–2026</p>
+                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2025–2026</p>
                 </div>
               </div>
               <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
               <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px]">JSS Academy</p>
-                <div className="flex justify-between items-center mt-1 sm:mt-1.5">
+                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">JSS Academy</p>
+                <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
                   <p className="text-zinc-400 text-xs sm:text-sm">B.Tech CSE</p>
-                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5">2020–2024</p>
+                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2020–2024</p>
                 </div>
               </div>
             </div>
@@ -436,15 +436,17 @@ export default function App() {
             <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">GitHub Activity</h3>
           </div>
 
-          <div className="scale-75 sm:scale-90 lg:scale-100 origin-left sm:origin-center max-w-full overflow-x-auto no-scrollbar pb-2 w-[130%] sm:w-auto">
-            <GitHubCalendar
-              username="Abhi20O1"
-              colorScheme="dark"
-              theme={{
-                dark: ['rgba(255,255,255,0.02)', 'rgba(59,130,246,0.3)', 'rgba(59,130,246,0.5)', 'rgba(59,130,246,0.8)', 'rgba(59,130,246,1)'],
-              }}
-              style={{ color: '#a1a1aa' }}
-            />
+          <div className="w-full overflow-x-auto no-scrollbar pb-2 flex justify-start sm:justify-center">
+            <div className="min-w-[700px] sm:min-w-0 pr-6 sm:pr-0">
+              <GitHubCalendar
+                username="Abhi20O1"
+                colorScheme="dark"
+                theme={{
+                  dark: ['rgba(255,255,255,0.02)', 'rgba(59,130,246,0.3)', 'rgba(59,130,246,0.5)', 'rgba(59,130,246,0.8)', 'rgba(59,130,246,1)'],
+                }}
+                style={{ color: '#a1a1aa' }}
+              />
+            </div>
           </div>
         </div>
 
