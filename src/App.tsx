@@ -319,7 +319,7 @@ export default function App() {
               </div>
               <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
               <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">JSS Academy</p>
+                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">JSS Academy of Technical Education, Noida</p>
                 <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
                   <p className="text-zinc-400 text-xs sm:text-sm">B.Tech CSE</p>
                   <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2020–2024</p>
