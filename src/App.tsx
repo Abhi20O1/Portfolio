@@ -285,7 +285,7 @@ export default function App() {
 
         {/* EDUCATION & LOCATION - 5 cols */}
         <div className="col-span-1 md:col-span-1 lg:col-span-5 flex flex-col gap-4 sm:gap-5 lg:gap-6 animate-fade-in-up stagger-4">
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 flex-1 relative overflow-hidden group">
+          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 grow relative overflow-hidden group min-h-[160px] flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
                 <MapPin size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
@@ -301,7 +301,7 @@ export default function App() {
             <p className="text-zinc-400 text-xs sm:text-sm font-medium">Open to Remote Data Roles</p>
           </div>
 
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 flex-1 group relative overflow-hidden">
+          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 grow group relative overflow-hidden flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-5 sm:mb-6">
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
                 <LineChart size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
