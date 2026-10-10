@@ -284,8 +284,8 @@ export default function App() {
         </div>
 
         {/* EDUCATION & LOCATION - 5 cols */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-5 flex flex-col gap-4 sm:gap-5 lg:gap-6 animate-fade-in-up stagger-4">
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 grow relative overflow-hidden group min-h-[160px] flex flex-col justify-center">
+        <div className="col-span-1 md:col-span-2 lg:col-span-5 flex flex-col md:flex-row lg:flex-col gap-4 sm:gap-5 lg:gap-6 animate-fade-in-up stagger-4">
+          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow relative overflow-hidden group min-h-[160px] flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
                 <MapPin size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
@@ -301,7 +301,7 @@ export default function App() {
             <p className="text-zinc-400 text-xs sm:text-sm font-medium">Open to Remote Data Roles</p>
           </div>
 
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 grow group relative overflow-hidden flex flex-col justify-center">
+          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow group relative overflow-hidden flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-5 sm:mb-6">
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
                 <LineChart size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
@@ -401,7 +401,7 @@ export default function App() {
                   key={proj.id}
                   href={proj.html_url !== '#' ? proj.html_url : undefined}
                   target={proj.html_url !== '#' ? "_blank" : undefined}
-                  className="group/card flex flex-col bg-zinc-900/40 rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-white/5 hover:border-cyan-500/30 hover:bg-zinc-800/60 transition-all duration-500 shadow-inner hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden h-full"
+                  className="group/card flex flex-col bg-zinc-900/40 rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-white/5 hover:border-cyan-500/30 hover:bg-zinc-800/60 hover:-translate-y-1 transition-all duration-500 shadow-inner hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden h-full"
                 >
                   <div className="absolute -top-10 -right-10 w-24 sm:w-32 h-24 sm:h-32 bg-white/5 rounded-full blur-[30px] sm:blur-[40px] -z-10 group-hover/card:bg-blue-500/20 transition-colors duration-500"></div>
 
@@ -437,7 +437,7 @@ export default function App() {
           </div>
 
           <div className="w-full overflow-x-auto no-scrollbar pb-2 flex justify-start sm:justify-center">
-            <div className="min-w-[700px] sm:min-w-0 pr-6 sm:pr-0">
+            <div className="min-w-[700px] lg:min-w-full pr-6 sm:pr-0">
               <GitHubCalendar
                 username="Abhi20O1"
                 colorScheme="dark"
