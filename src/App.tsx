@@ -298,7 +298,7 @@ export default function App() {
             </div>
 
             <p className="text-white font-bold text-2xl sm:text-3xl mb-1">New Delhi, IN</p>
-            <p className="text-zinc-400 text-xs sm:text-sm font-medium">Open to Remote Data Roles</p>
+            <p className="text-zinc-400 text-xs sm:text-sm font-medium">Open to Remote Roles</p>
           </div>
 
           <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow group relative overflow-hidden flex flex-col justify-center">
