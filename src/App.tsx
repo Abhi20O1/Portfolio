@@ -293,8 +293,8 @@ export default function App() {
               <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Location</h3>
             </div>
 
-            <div className="absolute right-0 bottom-0 opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/India_Delhi_location_map.svg/400px-India_Delhi_location_map.svg.png" alt="Map" className="w-48 h-48 sm:w-64 sm:h-64 object-cover mix-blend-luminosity opacity-80" style={{ maskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)' }} />
+            <div className="absolute right-0 bottom-0 opacity-30 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" style={{ maskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)' }}>
+              <iframe src="https://maps.google.com/maps?q=New%20Delhi&t=&z=11&ie=UTF8&iwloc=&output=embed" className="w-48 h-48 sm:w-64 sm:h-64 object-cover" style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) grayscale(30%)' }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
             </div>
 
             <p className="text-white font-bold text-2xl sm:text-3xl mb-1">New Delhi, IN</p>
