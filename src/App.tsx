@@ -142,7 +142,7 @@ export default function App() {
       <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 w-[95%] sm:w-[90%] max-w-4xl glass-panel rounded-full border border-white/10 animate-fade-in-up shadow-2xl backdrop-blur-xl bg-zinc-950/80">
         <div className="flex items-center gap-2.5 sm:gap-3">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-zinc-900/50">
-            <img src="/Logo.png" alt="Abhishek Singh Logo" className="w-full h-full object-cover" />
+            <img src={`${import.meta.env.BASE_URL}Logo.webp`} alt="Abhishek Singh Logo" className="w-full h-full object-cover" />
           </div>
           <span className="text-sm font-semibold text-zinc-200 hidden sm:block tracking-wide">Abhishek Singh</span>
         </div>
@@ -164,7 +164,7 @@ export default function App() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0 pointer-events-none">
             <img
-              src="/robo.png"
+              src={`${import.meta.env.BASE_URL}robo.webp`}
               alt="Abhishek"
               className="absolute right-0 top-0 h-full w-full sm:w-[60%] lg:w-[50%] object-cover object-center sm:object-[center_top] grayscale-[0.1] group-hover:grayscale-0 transition-all duration-700 opacity-30 sm:opacity-90 group-hover:scale-[1.02] origin-right"
             />
@@ -197,7 +197,7 @@ export default function App() {
               <a href="mailto:abhi28031@gmail.com" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]">
                 <Database size={16} className="sm:w-[18px] sm:h-[18px]" /> Contact Me
               </a>
-              <a href="/resume.pdf" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 transition-all text-sm font-medium backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]">
+              <a href={`${import.meta.env.BASE_URL}resume.pdf`} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 transition-all text-sm font-medium backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]">
                 <FileText size={16} className="sm:w-[18px] sm:h-[18px]" /> Resume
               </a>
               <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/20 transition-all text-zinc-200 text-sm font-medium backdrop-blur-md hover:border-white/30">
