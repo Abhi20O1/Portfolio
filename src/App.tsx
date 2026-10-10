@@ -82,7 +82,9 @@ export default function App() {
       try {
         const res = await fetch('https://api.github.com/users/Abhi20O1/repos');
         const data = await res.json();
-        if (!Array.isArray(data)) return;
+        if (!Array.isArray(data)) {
+          throw new Error("GitHub API limit exceeded");
+        }
 
         const filtered = data.filter((r: any) => r.name !== 'Abhi20O1' && r.name.toLowerCase() !== 'fastapi' && !r.fork);
         const reposWithReadme = await Promise.all(
@@ -126,6 +128,23 @@ export default function App() {
           ...reposWithReadme.filter(r => r.title.toLowerCase() !== 'healthcare chatbot')
         ]);
       } catch (err) {
+        // Fallback if GitHub API fails
+        setProjects([
+          {
+            id: 'chatbot',
+            title: 'Healthcare Chatbot',
+            html_url: '#',
+            language: 'Python',
+            description: 'Full end-to-end healthcare chatbot for 24/7 patient support via AWS Lex, Lambda & DynamoDB.'
+          },
+          {
+            id: 'portfolio',
+            title: 'Portfolio Website',
+            html_url: 'https://github.com/Abhi20O1/Portfolio',
+            language: 'TypeScript',
+            description: 'My personal portfolio website built with React, Vite, and Tailwind CSS.'
+          }
+        ]);
       } finally {
         setLoading(false);
       }
@@ -275,7 +294,7 @@ export default function App() {
             </div>
 
             <div className="absolute right-0 bottom-0 opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none">
-              <img src="https://api.maptiler.com/maps/basic-v2/static/77.2090,28.6139,11/400x300.png?key=get_your_own_OpIi9ZULNHzrESv6T2vL" alt="Map" className="w-48 h-48 sm:w-64 sm:h-64 object-cover mix-blend-luminosity" style={{ maskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)' }} />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/India_Delhi_location_map.svg/400px-India_Delhi_location_map.svg.png" alt="Map" className="w-48 h-48 sm:w-64 sm:h-64 object-cover mix-blend-luminosity opacity-80" style={{ maskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)' }} />
             </div>
 
             <p className="text-white font-bold text-2xl sm:text-3xl mb-1">New Delhi, IN</p>
