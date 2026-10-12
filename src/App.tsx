@@ -48,6 +48,17 @@ export default function App() {
     window.open(`https://wa.me/918126684451?text=${encodeURIComponent(`${intro}\n\n${contactMessage}`)}`, '_blank');
   };
 
+  const scrollToContact = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const contactElem = document.getElementById("contact");
+    if (contactElem) {
+      contactElem.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        document.getElementById("name")?.focus();
+      }, 500);
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -169,7 +180,11 @@ export default function App() {
           <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors p-1.5 sm:p-0">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
           </a>
-          <a href="https://wa.me/918126684451" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-[13px] text-zinc-950 bg-white hover:bg-zinc-200 px-4 sm:px-5 py-2 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] scale-95 hover:scale-100 whitespace-nowrap">
+          <a
+            href="#contact"
+            onClick={scrollToContact}
+            className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-[13px] text-zinc-950 bg-white hover:bg-zinc-200 px-4 sm:px-5 py-2 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] scale-95 hover:scale-100 whitespace-nowrap cursor-pointer"
+          >
             <MessageCircle size={14} className="fill-zinc-900 sm:w-4 sm:h-4" /> Let's Talk
           </a>
         </div>
@@ -213,7 +228,11 @@ export default function App() {
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4 items-center mt-auto">
-              <a href="mailto:abhi28031@gmail.com" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]">
+              <a
+                href="#contact"
+                onClick={scrollToContact}
+                className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] cursor-pointer"
+              >
                 <Database size={16} className="sm:w-[18px] sm:h-[18px]" /> Contact Me
               </a>
               <a href={`${import.meta.env.BASE_URL}resume.pdf`} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 transition-all text-sm font-medium backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]">
@@ -472,7 +491,7 @@ export default function App() {
         </div>
 
         {/* CONTACT FORM - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-6 relative overflow-hidden">
+        <div id="contact" className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-6 relative overflow-hidden scroll-mt-24 sm:scroll-mt-32">
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -z-10 group-hover:bg-blue-500/20 transition-colors duration-700"></div>
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
