@@ -17,8 +17,6 @@ body {
   color: #f7f8f8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-  background-size: 48px 48px;
 }
 
 /* Custom Scrollbar */
@@ -71,20 +69,7 @@ body {
   background: #111214;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: none;
-  position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 24px;
-  right: 24px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(113, 112, 255, 0.65), transparent);
-  opacity: 0.55;
-  pointer-events: none;
 }
 
 .glass-panel:hover {
