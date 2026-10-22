@@ -209,10 +209,10 @@ export default function App() {
             </div>
 
             <h1 className="text-4xl sm:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-extrabold tracking-tighter mb-3 sm:mb-4 text-white glow-text leading-tight sm:leading-tight">
-              Abhishek Singh
+              I turn messy data into useful decisions.
             </h1>
             <h2 className="text-xl sm:text-2xl lg:text-3xl gradient-text font-semibold tracking-tight mb-4 sm:mb-6">
-              Data Scientist | Machine Learning & Computer Vision
+              Abhishek Singh · Data Scientist & ML Engineer
             </h2>
             <p className="text-zinc-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 font-light drop-shadow-md">
               Building practical <span className="text-zinc-200 font-medium">Machine Learning</span> and <span className="text-zinc-200 font-medium">Computer Vision</span> systems with Python, SQL, OpenCV, YOLO, and cloud deployment.
@@ -245,7 +245,7 @@ export default function App() {
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
                 <Network size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Core Expertise</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">The toolkit</h3>
             </div>
           </div>
 
@@ -393,7 +393,7 @@ export default function App() {
               <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
                 <Bot size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Machine Learning Models & Projects</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Selected builds</h3>
             </div>
             <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="text-xs sm:text-sm font-medium text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors bg-white/5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/5 w-fit">
               View All Repos <ExternalLink size={14} className="sm:w-[14px] sm:h-[14px] w-3 h-3" />
