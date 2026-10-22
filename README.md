@@ -1,32 +1,35 @@
-# React + TypeScript + Vite
+# Abhishek Singh — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Personal portfolio for Abhishek Singh, an aspiring Data Scientist focused on machine learning, data analytics, and computer vision.
 
-Currently, two official plugins are available:
+## Highlights
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Python, R, SQL, C++, and JavaScript
+- OpenCV, YOLO, EasyOCR, TensorFlow, PyTorch, and scikit-learn
+- Flask REST APIs and AWS/Azure deployment
+- Projects in ANPR, facial emotion detection, machine learning, and AI applications
 
-## React Compiler
+## Run locally
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Validate a production build
+
+```bash
+npm run build
+npm run lint
+```
+
+## Links
+
+- Live portfolio: `https://abhi20o1.github.io/Portfolio/`
+- GitHub: https://github.com/Abhi20O1
+- LinkedIn: https://www.linkedin.com/in/abhishek-singh-sd
+- Resume: https://docs.google.com/document/d/1VfBbH7ghhcoIHZ4u3PKNQioqVUVmKjvnSEY0K4Xib9s/edit?usp=sharing
+
+## Deployment
+
+The project is a React + TypeScript + Vite application and includes a GitHub Actions workflow for static deployment.
