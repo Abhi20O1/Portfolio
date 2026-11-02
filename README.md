@@ -1,32 +1,35 @@
-# React + TypeScript + Vite
+# Abhishek Singh — AI Engineer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A React + TypeScript portfolio presenting my work in AI engineering, machine learning, computer vision, and deployable data products.
 
-Currently, two official plugins are available:
+## What this portfolio highlights
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Production-minded AI and machine-learning projects
+- Computer vision with OpenCV, YOLO, TensorFlow, and PyTorch
+- Data preparation, model evaluation, APIs, and cloud deployment
+- Experience, education, selected repositories, and contact links
 
-## React Compiler
+## Run locally
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Validate a production build
+
+```bash
+npm run build
+npm run lint
+```
+
+## Links
+
+- Live site: https://abhi20o1.github.io/Portfolio/
+- GitHub: https://github.com/Abhi20O1
+- LinkedIn: https://www.linkedin.com/in/abhishek-singh-sd
+- Resume: https://docs.google.com/document/d/1VfBbH7ghhcoIHZ4u3PKNQioqVUVmKjvnSEY0K4Xib9s/edit?usp=sharing
+
+## Deployment
+
+The site is built with Vite and deployed as a static GitHub Pages application through the repository workflow. The Vite base path is configured for `/Portfolio/`.
