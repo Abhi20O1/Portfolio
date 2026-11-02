@@ -134,7 +134,7 @@ export default function App() {
             title: 'Healthcare Chatbot',
             html_url: '#',
             language: 'Python',
-            description: 'Full end-to-end healthcare chatbot for 24/7 patient support via AWS Lex, Lambda & DynamoDB.'
+            description: 'Healthcare chatbot that handles patient support 24/7 using AWS Lex, Lambda, and DynamoDB.'
           },
           ...reposWithReadme.filter(r => r.title.toLowerCase() !== 'healthcare chatbot')
         ]);
@@ -146,7 +146,7 @@ export default function App() {
             title: 'Healthcare Chatbot',
             html_url: '#',
             language: 'Python',
-            description: 'Full end-to-end healthcare chatbot for 24/7 patient support via AWS Lex, Lambda & DynamoDB.'
+            description: 'Healthcare chatbot that handles patient support 24/7 using AWS Lex, Lambda, and DynamoDB.'
           },
           {
             id: 'portfolio',
@@ -224,7 +224,7 @@ export default function App() {
               Data Scientist & AI Engineer
             </h2>
             <p className="text-zinc-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 font-light drop-shadow-md">
-              Transforming raw data into intelligent <span className="text-zinc-200 font-medium">Machine Learning</span> models, deep neural networks, and scalable <span className="text-zinc-200 font-medium">Data Pipelines</span>.
+              Building production <span className="text-zinc-200 font-medium">Machine Learning</span> models, neural networks, and automated <span className="text-zinc-200 font-medium">Data Pipelines</span> from messy, real-world data.
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4 items-center mt-auto">
@@ -375,21 +375,21 @@ export default function App() {
                   <Database size={32} className="sm:w-10 sm:h-10" />
                 </div>
                 <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div> Data Pipelines</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Developed automated data cleaning pipelines with Python/R, significantly reducing overall data preparation time by 30%.</p>
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Built automated Python and R data cleaning pipelines, cutting data preparation time by 30%.</p>
               </div>
               <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
                   <Cpu size={32} className="sm:w-10 sm:h-10" />
                 </div>
                 <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div> ML Architecture</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Architected end-to-end cloud AI systems using AWS (S3, SageMaker) and Azure for scalable infrastructure.</p>
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Designed and deployed cloud ML pipelines across AWS (S3, SageMaker) and Azure.</p>
               </div>
               <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
                   <Terminal size={32} className="sm:w-10 sm:h-10" />
                 </div>
                 <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div> Model Deployment</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Successfully deployed Random Forest and CNN models via robust Flask APIs for enterprise production use.</p>
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Deployed Random Forest and CNN models behind Flask APIs for production workloads.</p>
               </div>
             </div>
           </div>
@@ -503,7 +503,7 @@ export default function App() {
                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Let's Work Together</h3>
               </div>
               <p className="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-md">
-                I'm currently available for freelance projects and full-time opportunities. If you're looking for a Data Scientist or AI Engineer to build intelligent solutions, I'd love to hear from you.
+                Open to full-time roles and contract projects. If you need a data scientist to build and ship practical ML systems, let's talk.
               </p>
             </div>
 
