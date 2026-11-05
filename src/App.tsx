@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { GitHubCalendar } from 'react-github-calendar';
+import { useState, useEffect, useRef } from 'react';
+import { GitHubCalendar, type Activity as GitHubActivity } from 'react-github-calendar';
 import { Mail, MessageCircle, MapPin, Code2, Bot, ExternalLink, ArrowRight, Network, Database, LineChart, Cpu, Terminal, Activity, Send, FileText } from 'lucide-react';
 
 function InteractiveBackground() {
@@ -13,6 +13,31 @@ function InteractiveBackground() {
 export default function App() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
+  const calendarScrollRef = useRef<HTMLDivElement>(null);
+
+  const selectLastHalfYear = (contributions: GitHubActivity[]) => {
+    const cutoffDate = new Date();
+    cutoffDate.setMonth(cutoffDate.getMonth() - 6);
+    const cutoffStr = cutoffDate.toISOString().slice(0, 10);
+    return contributions.filter((activity) => activity.date >= cutoffStr);
+  };
+
+  useEffect(() => {
+    const el = calendarScrollRef.current;
+    if (!el) return;
+
+    const scrollToLatest = () => {
+      el.scrollLeft = el.scrollWidth;
+    };
+
+    scrollToLatest();
+
+    const observer = new MutationObserver(scrollToLatest);
+    observer.observe(el, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, [calendarRange]);
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
@@ -439,18 +464,53 @@ export default function App() {
 
         {/* CONTRIBUTIONS - 6 cols */}
         <div className="col-span-1 md:col-span-1 lg:col-span-6 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-6 flex flex-col justify-center items-center overflow-hidden">
-          <div className="flex items-center gap-3 w-full mb-6 sm:mb-8">
-            <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300 w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full mb-6 sm:mb-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300 w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">GitHub Activity</h3>
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">GitHub Activity</h3>
+            <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5 text-[11px] font-medium self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setCalendarRange('6months')}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  calendarRange === '6months'
+                    ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                Last 6 Months
+              </button>
+              <button
+                type="button"
+                onClick={() => setCalendarRange('year')}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  calendarRange === 'year'
+                    ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                Full Year
+              </button>
+            </div>
           </div>
 
-          <div className="w-full overflow-x-auto no-scrollbar pb-2 flex justify-start sm:justify-center">
-            <div className="min-w-[700px] lg:min-w-full pr-6 sm:pr-0">
+          <div
+            ref={calendarScrollRef}
+            className={`w-full overflow-x-auto no-scrollbar pb-2 flex ${calendarRange === '6months' ? 'justify-start sm:justify-center' : 'justify-start'}`}
+          >
+            <div className={`${calendarRange === '6months' ? 'min-w-fit' : 'min-w-[700px] lg:min-w-full'} pr-4 sm:pr-0`}>
               <GitHubCalendar
                 username="Abhi20O1"
                 colorScheme="dark"
+                transformData={calendarRange === '6months' ? selectLastHalfYear : undefined}
+                labels={
+                  calendarRange === '6months'
+                    ? { totalCount: '{{count}} contributions in the last 6 months' }
+                    : undefined
+                }
                 theme={{
                   dark: ['rgba(255,255,255,0.02)', 'rgba(59,130,246,0.3)', 'rgba(59,130,246,0.5)', 'rgba(59,130,246,0.8)', 'rgba(59,130,246,1)'],
                 }}
