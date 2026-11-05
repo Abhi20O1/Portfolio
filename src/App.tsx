@@ -14,7 +14,7 @@ export default function App() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
-  const [algoPlatform, setAlgoPlatform] = useState<'leetcode' | 'hackerrank'>('leetcode');
+  const [algoPlatform, setAlgoPlatform] = useState<'hackerrank' | 'leetcode'>('hackerrank');
   const calendarScrollRef = useRef<HTMLDivElement>(null);
 
   const selectLastHalfYear = (contributions: GitHubActivity[]) => {
@@ -533,17 +533,6 @@ export default function App() {
             <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5 text-[11px] font-medium self-start sm:self-auto">
               <button
                 type="button"
-                onClick={() => setAlgoPlatform('leetcode')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  algoPlatform === 'leetcode'
-                    ? 'bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                LeetCode
-              </button>
-              <button
-                type="button"
                 onClick={() => setAlgoPlatform('hackerrank')}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   algoPlatform === 'hackerrank'
@@ -553,21 +542,21 @@ export default function App() {
               >
                 HackerRank
               </button>
+              <button
+                type="button"
+                onClick={() => setAlgoPlatform('leetcode')}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  algoPlatform === 'leetcode'
+                    ? 'bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                LeetCode
+              </button>
             </div>
           </div>
 
-          {algoPlatform === 'leetcode' ? (
-            <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="w-full flex justify-center group/img relative">
-              <div className="relative w-full max-w-[500px]">
-                <div className="absolute inset-0 bg-orange-500/20 blur-[20px] sm:blur-[30px] rounded-xl sm:rounded-2xl -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
-                <img
-                  src="https://leetcard.jacoblin.cool/abhi28031?theme=dark&font=Geist&ext=activity"
-                  alt="LeetCode Stats"
-                  className="w-full rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 group-hover/img:border-white/30 transition-all duration-300"
-                />
-              </div>
-            </a>
-          ) : (
+          {algoPlatform === 'hackerrank' ? (
             <a
               href="https://www.hackerrank.com/profile/abhi28031"
               target="_blank"
@@ -618,6 +607,17 @@ export default function App() {
                     <span className="text-emerald-400 group-hover/img:translate-x-0.5 transition-transform font-medium">View Badges & Challenges →</span>
                   </div>
                 </div>
+              </div>
+            </a>
+          ) : (
+            <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="w-full flex justify-center group/img relative">
+              <div className="relative w-full max-w-[500px]">
+                <div className="absolute inset-0 bg-orange-500/20 blur-[20px] sm:blur-[30px] rounded-xl sm:rounded-2xl -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
+                <img
+                  src="https://leetcard.jacoblin.cool/abhi28031?theme=dark&font=Geist&ext=activity"
+                  alt="LeetCode Stats"
+                  className="w-full rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 group-hover/img:border-white/30 transition-all duration-300"
+                />
               </div>
             </a>
           )}
