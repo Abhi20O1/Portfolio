@@ -1,7 +1,7 @@
-/* Hallmark · shape: settled · genre: modern-minimal · theme: Console (by request) · redesign: full
- * hero: settled · nav: floating · footer: hairline · imagery: product · signature: hairline-panels · console: graphite
- * axes: dark/grotesk-sans/chromatic-amber · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: H, calm headline measure over 60ch */
+/* Hallmark · shape: workbench · genre: modern-minimal · theme: Vantage (by request) · redesign: full
+ * hero: stage · nav: edge-aligned · footer: mast · imagery: none · signature: point-cloud-scanner · vantage: terrain/steel
+ * axes: dark/grotesk-sans/chromatic-lime · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: H, concise display heading measure */
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./base.css" layer(base);
@@ -15,54 +15,72 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
+  font-weight: 300;
+  font-variation-settings: "SHRP" 0;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-paper-3);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-rule-2);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-muted);
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-variation-settings: "SHRP" 100;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.05;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Hairline corner ticks from Vantage theme */
+.ticks {
+  position: relative;
 }
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.ticks::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: var(--rule-hair) solid var(--color-rule-2);
+  -webkit-mask: conic-gradient(at var(--tick) var(--tick), transparent 75%, var(--color-ink) 0) 0 0 / calc(100% - var(--tick)) calc(100% - var(--tick));
+  mask: conic-gradient(at var(--tick) var(--tick), transparent 75%, var(--color-ink) 0) 0 0 / calc(100% - var(--tick)) calc(100% - var(--tick));
 }
 
-/* Hairline Panels (Console Signature) */
-.console-panel {
-  background: var(--color-paper-2);
+.ticks-accent::before {
+  border-color: var(--color-accent);
+}
+
+/* Panels */
+.v-panel {
+  background-color: var(--color-paper-2);
   color: var(--color-ink);
-  border: 1px solid var(--color-rule);
+  border: var(--rule-hair) solid var(--color-rule);
   border-radius: var(--radius-card);
   transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
 }
 
-.console-panel:hover {
+.v-panel:hover {
   border-color: var(--color-rule-2);
 }
 
-.console-subpanel {
-  background: var(--color-paper-3);
+.v-subpanel {
+  background-color: var(--color-paper-3);
   color: var(--color-ink-2);
-  border: 1px solid var(--color-rule);
-  border-radius: 8px;
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
 }
 
+/* Tabular measurements */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+.num .u {
+  color: var(--color-muted);
+  font-size: 0.75em;
+  margin-left: var(--space-3xs);
+}
+
+/* Buttons and interactive states */
 button:active, a:active {
   opacity: 0.85;
+  transform: scale(0.99);
 }
 
 button:disabled, input:disabled, textarea:disabled {
@@ -70,18 +88,63 @@ button:disabled, input:disabled, textarea:disabled {
   cursor: not-allowed;
 }
 
-/* Measured numbers & telemetry */
-.measured {
-  font-family: var(--font-outlier);
-  font-variant-numeric: tabular-nums slashed-zero;
+.btn-vantage-primary {
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-short) var(--ease-out);
 }
 
-/* Motion Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.btn-vantage-primary:hover {
+  background-color: var(--color-accent-hi);
+}
+
+.btn-vantage-secondary {
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--color-ink);
+  font-weight: 400;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+
+.btn-vantage-secondary:hover {
+  background-color: var(--color-paper-2);
+  border-color: var(--color-ink-2);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rule-2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
 }
