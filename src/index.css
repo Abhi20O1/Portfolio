@@ -1,7 +1,7 @@
-/* Hallmark · shape: workbench · genre: modern-minimal · theme: Vantage (by request) · redesign: full
- * hero: stage · nav: edge-aligned · footer: mast · imagery: none · signature: point-cloud-scanner · vantage: terrain/steel
- * axes: dark/grotesk-sans/chromatic-lime · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: H, concise display heading measure */
+/* Hallmark · shape: workbench · genre: modern-minimal · theme: Rim (by request) · redesign: full
+ * hero: settled · nav: edge-aligned · footer: mast · imagery: none · signature: architecture-workbench · rim: night
+ * axes: dark/grotesk-sans/warm · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: H, clean display heading measure */
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./base.css" layer(base);
@@ -15,38 +15,19 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-weight: 300;
-  font-variation-settings: "SHRP" 0;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: var(--display-weight);
-  font-variation-settings: "SHRP" 100;
   letter-spacing: var(--tracking-display);
-  line-height: 1.05;
+  line-height: 1.15;
 }
 
-/* Hairline corner ticks from Vantage theme */
-.ticks {
-  position: relative;
-}
-.ticks::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border: var(--rule-hair) solid var(--color-rule-2);
-  -webkit-mask: conic-gradient(at var(--tick) var(--tick), transparent 75%, var(--color-ink) 0) 0 0 / calc(100% - var(--tick)) calc(100% - var(--tick));
-  mask: conic-gradient(at var(--tick) var(--tick), transparent 75%, var(--color-ink) 0) 0 0 / calc(100% - var(--tick)) calc(100% - var(--tick));
-}
-
-.ticks-accent::before {
-  border-color: var(--color-accent);
-}
-
-/* Panels */
-.v-panel {
+/* Professional Cards & Panels */
+.pro-card {
   background-color: var(--color-paper-2);
   color: var(--color-ink);
   border: var(--rule-hair) solid var(--color-rule);
@@ -54,15 +35,28 @@ h1, h2, h3 {
   transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
 }
 
-.v-panel:hover {
+.pro-card:hover {
   border-color: var(--color-rule-2);
 }
 
-.v-subpanel {
+.pro-subcard {
   background-color: var(--color-paper-3);
   color: var(--color-ink-2);
   border: var(--rule-hair) solid var(--color-rule);
-  border-radius: var(--radius-card);
+  border-radius: calc(var(--radius-card) - 2px);
+}
+
+/* Tag & Badges */
+.pro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+  background-color: var(--color-badge);
+  color: var(--color-badge-ink);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 500;
 }
 
 /* Tabular measurements */
@@ -77,25 +71,29 @@ h1, h2, h3 {
   margin-left: var(--space-3xs);
 }
 
-/* Buttons and interactive states */
-button:active, a:active {
+/* Professional Buttons */
+button:active,
+a:active {
   opacity: 0.85;
   transform: scale(0.99);
 }
 
-button:disabled, input:disabled, textarea:disabled {
+button:disabled,
+input:disabled,
+textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn-vantage-primary {
-  min-height: 44px;
+.btn-primary {
+  min-height: 42px;
   padding: 0 var(--space-lg);
   border: 0;
   border-radius: var(--radius-pill);
   background-color: var(--color-accent);
   color: var(--color-accent-ink);
-  font-weight: 500;
+  font-weight: 600;
+  font-size: var(--text-sm);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -106,18 +104,19 @@ button:disabled, input:disabled, textarea:disabled {
   transition: background-color var(--dur-short) var(--ease-out);
 }
 
-.btn-vantage-primary:hover {
+.btn-primary:hover {
   background-color: var(--color-accent-hi);
 }
 
-.btn-vantage-secondary {
-  min-height: 44px;
+.btn-secondary {
+  min-height: 42px;
   padding: 0 var(--space-lg);
   border: var(--rule-hair) solid var(--color-rule-2);
   border-radius: var(--radius-pill);
-  background-color: transparent;
+  background-color: var(--color-paper-2);
   color: var(--color-ink);
-  font-weight: 400;
+  font-weight: 500;
+  font-size: var(--text-sm);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -128,23 +127,26 @@ button:disabled, input:disabled, textarea:disabled {
   transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
 }
 
-.btn-vantage-secondary:hover {
-  background-color: var(--color-paper-2);
+.btn-secondary:hover {
+  background-color: var(--color-paper-3);
   border-color: var(--color-ink-2);
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--color-paper);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-rule-2);
-  border-radius: 2px;
+  border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-muted);
 }
