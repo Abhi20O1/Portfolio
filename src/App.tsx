@@ -1,14 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { GitHubCalendar, type Activity as GitHubActivity } from 'react-github-calendar';
-import { Mail, MessageCircle, MapPin, Code2, Bot, ExternalLink, ArrowRight, Network, Database, LineChart, Cpu, Terminal, Activity, Send, FileText } from 'lucide-react';
-
-function InteractiveBackground() {
-  return (
-    <div className="fixed inset-0 z-[-1] overflow-hidden bg-zinc-950 pointer-events-none">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(113,112,255,0.08),transparent_42%)]"></div>
-    </div>
-  );
-}
+import {
+  Mail,
+  MessageCircle,
+  MapPin,
+  Code2,
+  ExternalLink,
+  ArrowRight,
+  Network,
+  Database,
+  LineChart,
+  Cpu,
+  Terminal,
+  Send,
+  FileText,
+  Star
+} from 'lucide-react';
 
 export default function App() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -16,6 +23,10 @@ export default function App() {
   const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
   const [algoPlatform, setAlgoPlatform] = useState<'hackerrank' | 'leetcode'>('hackerrank');
   const calendarScrollRef = useRef<HTMLDivElement>(null);
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [formError, setFormError] = useState("");
 
   const selectLastHalfYear = (contributions: GitHubActivity[]) => {
     const cutoffDate = new Date();
@@ -33,21 +44,16 @@ export default function App() {
     };
 
     scrollToLatest();
-
     const observer = new MutationObserver(scrollToLatest);
     observer.observe(el, { childList: true, subtree: true });
 
     return () => observer.disconnect();
   }, [calendarRange]);
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactMessage, setContactMessage] = useState("");
-  const [formError, setFormError] = useState("");
 
   const handleEmailSubmit = () => {
-    if (!contactName) return setFormError("Please enter your name!");
-    if (!contactEmail) return setFormError("Please enter your email!");
-    if (!contactMessage) return setFormError("Please enter a message!");
+    if (!contactName) return setFormError("Please enter your name.");
+    if (!contactEmail) return setFormError("Please enter your email.");
+    if (!contactMessage) return setFormError("Please enter a message.");
     setFormError("");
 
     const emailStr = contactEmail ? ` (${contactEmail})` : "";
@@ -56,9 +62,9 @@ export default function App() {
   };
 
   const handleWhatsAppSubmit = () => {
-    if (!contactName) return setFormError("Please enter your name!");
-    if (!contactEmail) return setFormError("Please enter your email!");
-    if (!contactMessage) return setFormError("Please enter a message!");
+    if (!contactName) return setFormError("Please enter your name.");
+    if (!contactEmail) return setFormError("Please enter your email.");
+    if (!contactMessage) return setFormError("Please enter a message.");
     setFormError("");
 
     const intro = `Hi, I am ${contactName}${contactEmail ? ` (${contactEmail})` : ''} reaching out from your portfolio.`;
@@ -75,35 +81,6 @@ export default function App() {
       }, 500);
     }
   };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          } else {
-            entry.target.classList.remove("is-visible");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const observeElements = () => {
-      document.querySelectorAll(".animate-fade-in-up").forEach((el) => {
-        observer.observe(el);
-      });
-    };
-
-    // Small delay to ensure DOM and dynamic projects are rendered
-    const timeoutId = setTimeout(observeElements, 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-      observer.disconnect();
-    };
-  }, [projects]);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -132,7 +109,7 @@ export default function App() {
                   }
                 }
               }
-            } catch { }
+            } catch (e) { }
             if (readmeText.length > 120) readmeText = readmeText.substring(0, 117) + "...";
 
             return {
@@ -155,8 +132,7 @@ export default function App() {
           },
           ...reposWithReadme.filter(r => r.title.toLowerCase() !== 'healthcare chatbot')
         ]);
-      } catch {
-        // Fallback if GitHub API fails
+      } catch (err) {
         setProjects([
           {
             id: 'chatbot',
@@ -170,7 +146,7 @@ export default function App() {
             title: 'Portfolio Website',
             html_url: 'https://github.com/Abhi20O1/Portfolio',
             language: 'TypeScript',
-            description: 'My personal portfolio website built with React, Vite, and Tailwind CSS.'
+            description: 'Personal portfolio website built with React, Vite, and Tailwind CSS.'
           }
         ]);
       } finally {
@@ -181,541 +157,598 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans selection:bg-white/20 selection:text-white pb-4 sm:pb-6">
-      <InteractiveBackground />
-      <div className="noise-texture"></div>
-
-      {/* Navbar (Minimal & Floating) */}
-      <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 w-[95%] sm:w-[90%] max-w-6xl glass-panel rounded-xl border border-white/10 animate-fade-in-up shadow-lg bg-zinc-950/90">
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-zinc-900/50">
-            <img src={`${import.meta.env.BASE_URL}Logo.webp`} alt="Abhishek Singh Logo" className="w-full h-full object-cover" />
-          </div>
-          <span className="text-sm font-semibold text-zinc-200 hidden sm:block tracking-wide">Abhishek Singh</span>
-        </div>
-        <div className="flex items-center gap-3 sm:gap-5">
-          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors p-1.5 sm:p-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
-          </a>
-          <a
-            href="#contact"
-            onClick={scrollToContact}
-            className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-[13px] text-zinc-950 bg-white hover:bg-zinc-200 px-4 sm:px-5 py-2 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] scale-95 hover:scale-100 whitespace-nowrap cursor-pointer"
-          >
-            <MessageCircle size={14} className="fill-zinc-900 sm:w-4 sm:h-4" /> Let's Talk
-          </a>
-        </div>
-      </nav>
-
-      {/* Bento Grid Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 auto-rows-min">
-
-        {/* HERO - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] flex flex-col relative overflow-hidden group animate-fade-in-up stagger-1 min-h-[400px] sm:min-h-[450px]">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <img
-              src={`${import.meta.env.BASE_URL}robo.webp`}
-              alt="Abhishek"
-              className="absolute right-0 top-0 h-full w-full sm:w-[60%] lg:w-[50%] object-cover object-center sm:object-[center_top] grayscale-[0.1] group-hover:grayscale-0 transition-all duration-700 opacity-30 sm:opacity-90 group-hover:scale-[1.02] origin-right"
-            />
-            {/* Gradient Overlay for Text Readability and Seamless Blending */}
-            <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-zinc-950 via-zinc-950/95 sm:via-zinc-950/80 to-zinc-950/10 sm:to-transparent"></div>
-            {/* Extra dark gradient on the left edge of the image to blend it into the solid background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-transparent to-transparent w-full sm:w-[60%]"></div>
-          </div>
-
-          <div className="relative z-10 p-6 sm:p-8 lg:p-12 flex flex-col h-full justify-center w-full sm:w-3/4 lg:w-2/3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full mb-6 sm:mb-8 border border-indigo-500/20 bg-indigo-500/10 backdrop-blur-md w-fit shadow-[0_0_20px_rgba(6,182,212,0.1)]">
-              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-indigo-500"></span>
-              </span>
-              <span className="text-[10px] sm:text-[12px] text-indigo-300 font-mono tracking-wide uppercase">SYS.STATUS : ONLINE</span>
+    <div className="min-h-screen bg-paper text-ink pb-12 selection:bg-accent-soft selection:text-ink">
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 bg-paper border-b border-rule">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-rule-2 bg-paper-3 flex items-center justify-center">
+              <img
+                src={`${import.meta.env.BASE_URL}Logo.webp`}
+                alt="Abhishek Singh logo"
+                className="w-full h-full object-cover"
+              />
             </div>
-
-            <h1 className="text-4xl sm:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-extrabold tracking-tighter mb-3 sm:mb-4 text-white glow-text leading-tight sm:leading-tight">
-              Abhishek Singh
-            </h1>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl gradient-text font-semibold tracking-tight mb-4 sm:mb-6">
-              Data Scientist | Machine Learning & Computer Vision
-            </h2>
-            <p className="text-zinc-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 font-light drop-shadow-md">
-              Transforming raw data into intelligent <span className="text-zinc-200 font-medium">Machine Learning</span> models, deep neural networks, and scalable <span className="text-zinc-200 font-medium">Data Pipelines</span>.
-            </p>
-
-            <div className="flex flex-wrap gap-3 sm:gap-4 items-center mt-auto">
-              <a
-                href="#contact"
-                onClick={scrollToContact}
-                className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] cursor-pointer"
-              >
-                <Database size={16} className="sm:w-[18px] sm:h-[18px]" /> Contact Me
-              </a>
-              <a href={`${import.meta.env.BASE_URL}resume.pdf`} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 transition-all text-sm font-medium backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]">
-                <FileText size={16} className="sm:w-[18px] sm:h-[18px]" /> Resume
-              </a>
-              <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/20 transition-all text-zinc-200 text-sm font-medium backdrop-blur-md hover:border-white/30">
-                LinkedIn <ArrowRight size={14} className="opacity-50 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
+            <span className="text-sm font-medium text-ink">Abhishek Singh</span>
           </div>
+
+          <nav className="flex items-center gap-4 sm:gap-6">
+            <a
+              href="https://github.com/Abhi20O1"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub profile"
+              className="text-muted hover:text-ink transition-colors p-1"
+            >
+              <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
+            </a>
+            <a
+              href="https://www.hackerrank.com/profile/abhi28031"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="HackerRank profile"
+              className="text-muted hover:text-ink transition-colors p-1"
+            >
+              <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/abhishek-singh-sd"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn profile"
+              className="text-muted hover:text-ink transition-colors p-1"
+            >
+              <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
+            </a>
+            <a
+              href="#contact"
+              onClick={scrollToContact}
+              className="px-3.5 py-1.5 rounded-pill bg-accent text-accent-ink text-xs font-semibold hover:opacity-95 transition-opacity"
+            >
+              Let’s talk
+            </a>
+          </nav>
         </div>
+      </header>
 
-        {/* CORE EXPERTISE - 7 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-7 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-3 flex flex-col justify-center relative overflow-hidden">
-          <div className="absolute -bottom-20 -left-20 w-48 h-48 sm:w-64 sm:h-64 bg-purple-500/10 rounded-full blur-[60px] sm:blur-[80px] -z-10 group-hover:bg-purple-500/20 transition-colors duration-700"></div>
-
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <Network size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 space-y-12">
+        {/* HERO SECTION */}
+        <section className="console-panel p-6 sm:p-10 lg:p-12">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start justify-between">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-paper-3 border border-rule text-xs text-muted mb-6">
+                <span className="w-2 h-2 rounded-full bg-accent" aria-hidden="true"></span>
+                <span>Available for roles: New Delhi, India</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Core Expertise</h3>
+
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-ink mb-3">
+                Abhishek Singh
+              </h1>
+              <h2 className="text-xl sm:text-2xl text-ink-2 font-normal mb-6">
+                Data Scientist & AI Engineer
+              </h2>
+              <p className="text-muted text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
+                Building production machine learning models and automated data pipelines from real-world data.
+              </p>
+
+              <div className="flex flex-wrap gap-3 items-center">
+                <a
+                  href="#contact"
+                  onClick={scrollToContact}
+                  className="px-5 py-2.5 rounded-pill bg-accent text-accent-ink text-sm font-semibold hover:opacity-95 transition-opacity"
+                >
+                  Contact Me
+                </a>
+                <a
+                  href={`${import.meta.env.BASE_URL}resume.pdf`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-5 py-2.5 rounded-pill bg-paper-3 border border-rule-2 text-ink text-sm font-medium hover:border-muted transition-colors flex items-center gap-2"
+                >
+                  <FileText size={16} aria-hidden="true" /> Resume
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/abhishek-singh-sd"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2.5 rounded-pill text-muted hover:text-ink text-sm font-medium transition-colors flex items-center gap-1.5"
+                >
+                  LinkedIn <ArrowRight size={14} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+
+            {/* Instrument Ledger (Console Theme Signature) */}
+            <div className="w-full lg:w-80 console-subpanel p-5 space-y-4 shrink-0">
+              <div className="border-b border-rule pb-3">
+                <p className="text-xs text-muted font-medium">Core Stack</p>
+                <p className="text-sm text-ink font-medium mt-1">Python, PyTorch, SQL, AWS, Azure</p>
+              </div>
+              <div className="border-b border-rule pb-3">
+                <p className="text-xs text-muted font-medium">Latest Experience</p>
+                <p className="text-sm text-ink font-medium mt-1">Data Scientist Trainee</p>
+                <p className="text-xs text-muted">Arcap REIT AI Solution (2025 to 2026)</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted font-medium">Education</p>
+                <p className="text-sm text-ink font-medium mt-1">IIT Guwahati & Daksh Gurukul</p>
+                <p className="text-xs text-muted">B.Tech CSE, JSS Academy Noida</p>
+              </div>
             </div>
           </div>
+        </section>
 
-          <div className="space-y-5 sm:space-y-6">
+        {/* CORE EXPERTISE */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 px-1">
+            <Network size={18} className="text-muted" aria-hidden="true" />
+            <h3 className="text-lg font-medium text-ink">Core Expertise</h3>
+          </div>
+
+          <div className="console-panel p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Machine Learning & AI"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
+              <p className="text-xs text-muted font-medium mb-3">Machine Learning & AI</p>
+              <div className="flex flex-wrap gap-2">
                 {['TensorFlow', 'PyTorch', 'Scikit-Learn', 'Keras', 'AWS SageMaker', 'OpenCV', 'YOLO', 'LLMs', 'Pandas'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs sm:text-sm font-medium hover:bg-blue-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(59,130,246,0.1)] font-mono">
+                  <span key={skill} className="px-2.5 py-1 rounded-md bg-paper-3 border border-rule text-xs font-mono text-ink-2">
                     {skill}
                   </span>
                 ))}
               </div>
             </div>
+
             <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Data Engineering & Tools"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
+              <p className="text-xs text-muted font-medium mb-3">Data Engineering & Pipelines</p>
+              <div className="flex flex-wrap gap-2">
                 {['SQL', 'Flask', 'Azure', 'Linux', 'Git', 'Data Pipelines'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs sm:text-sm font-medium hover:bg-emerald-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(16,185,129,0.1)] font-mono">
+                  <span key={skill} className="px-2.5 py-1 rounded-md bg-paper-3 border border-rule text-xs font-mono text-ink-2">
                     {skill}
                   </span>
                 ))}
               </div>
             </div>
+
             <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Languages"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                {['Python', 'JavaScript', 'C++', 'C#', 'TypeScript'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs sm:text-sm font-medium hover:bg-purple-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(168,85,247,0.1)] font-mono">
+              <p className="text-xs text-muted font-medium mb-3">Languages</p>
+              <div className="flex flex-wrap gap-2">
+                {['Python', 'C++', 'SQL', 'JavaScript', 'TypeScript', 'C#'].map((skill) => (
+                  <span key={skill} className="px-2.5 py-1 rounded-md bg-paper-3 border border-rule text-xs font-mono text-ink-2">
                     {skill}
                   </span>
                 ))}
               </div>
             </div>
+
             <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Interactive Dashboards & Web"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                {['React', 'Next.js', 'Node.js', 'Express', 'TailwindCSS', 'Vite', 'MongoDB'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs sm:text-sm font-medium hover:bg-indigo-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(6,182,212,0.1)] font-mono">
+              <p className="text-xs text-muted font-medium mb-3">Web & Dashboards</p>
+              <div className="flex flex-wrap gap-2">
+                {['React', 'Next.js', 'Node.js', 'Express', 'Tailwind CSS', 'Vite', 'MongoDB'].map((skill) => (
+                  <span key={skill} className="px-2.5 py-1 rounded-md bg-paper-3 border border-rule text-xs font-mono text-ink-2">
                     {skill}
                   </span>
                 ))}
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* EDUCATION & LOCATION - 5 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-5 flex flex-col md:flex-row lg:flex-col gap-4 sm:gap-5 lg:gap-6 animate-fade-in-up stagger-4">
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow relative overflow-hidden group min-h-[160px] flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-4 sm:mb-6">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <MapPin size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
+        {/* PROFESSIONAL EXPERIENCE & EDUCATION */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Experience */}
+          <div className="lg:col-span-8 space-y-4">
+            <div className="flex items-center gap-2 px-1">
+              <Cpu size={18} className="text-muted" aria-hidden="true" />
+              <h3 className="text-lg font-medium text-ink">Professional Experience</h3>
+            </div>
+
+            <div className="console-panel p-6 sm:p-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-4 border-b border-rule">
+                <div>
+                  <h4 className="text-base font-semibold text-ink">Arcap REIT AI Solution</h4>
+                  <p className="text-xs text-accent mt-0.5">Data Scientist Trainee</p>
+                </div>
+                <span className="text-xs font-mono text-muted">Aug 2025 to Jan 2026</span>
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Location</h3>
-            </div>
 
-            <div className="absolute right-0 bottom-0 opacity-30 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" style={{ maskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)' }}>
-              <iframe src="https://maps.google.com/maps?q=New%20Delhi&t=&z=11&ie=UTF8&iwloc=&output=embed" className="w-48 h-48 sm:w-64 sm:h-64 object-cover" style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) grayscale(30%)' }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+              <div className="space-y-4">
+                <div className="console-subpanel p-4">
+                  <div className="flex items-center gap-2 text-xs font-medium text-ink mb-1.5">
+                    <Database size={15} className="text-cool" aria-hidden="true" />
+                    <span>Data Pipelines</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    Built automated Python and R data cleaning pipelines, cutting data preparation time by 30%.
+                  </p>
+                </div>
 
-            <p className="text-white font-bold text-2xl sm:text-3xl mb-1">New Delhi, IN</p>
-            <p className="text-zinc-400 text-xs sm:text-sm font-medium">Open to Remote Roles</p>
+                <div className="console-subpanel p-4">
+                  <div className="flex items-center gap-2 text-xs font-medium text-ink mb-1.5">
+                    <Cpu size={15} className="text-cool" aria-hidden="true" />
+                    <span>ML Architecture</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    Designed and deployed cloud ML pipelines across AWS (S3, SageMaker) and Azure.
+                  </p>
+                </div>
+
+                <div className="console-subpanel p-4">
+                  <div className="flex items-center gap-2 text-xs font-medium text-ink mb-1.5">
+                    <Terminal size={15} className="text-cool" aria-hidden="true" />
+                    <span>Model Deployment</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    Deployed Random Forest and CNN models behind Flask APIs for production workloads.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow group relative overflow-hidden flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-5 sm:mb-6">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <LineChart size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Education</h3>
+          {/* Education & Location */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="flex items-center gap-2 px-1">
+              <LineChart size={18} className="text-muted" aria-hidden="true" />
+              <h3 className="text-lg font-medium text-ink">Education & Location</h3>
             </div>
 
-            <div className="space-y-5">
+            <div className="console-panel p-6 space-y-6">
               <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">IIT Guwahati & Daksh Gurukul</p>
-                <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
-                  <p className="text-zinc-400 text-xs sm:text-sm">Data Science</p>
-                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2025–2026</p>
+                <p className="text-xs text-muted font-medium mb-1">Education</p>
+                <div className="space-y-3 mt-3">
+                  <div>
+                    <p className="text-xs font-semibold text-ink">IIT Guwahati & Daksh Gurukul</p>
+                    <p className="text-xs text-muted">Data Science (2025 to 2026)</p>
+                  </div>
+                  <div className="border-t border-rule pt-2">
+                    <p className="text-xs font-semibold text-ink">JSS Academy of Technical Education</p>
+                    <p className="text-xs text-muted">B.Tech Computer Science (2020 to 2024)</p>
+                  </div>
                 </div>
               </div>
-              <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
-              <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">JSS Academy of Technical Education, Noida</p>
-                <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
-                  <p className="text-zinc-400 text-xs sm:text-sm">B.Tech CSE</p>
-                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2020–2024</p>
+
+              <div className="border-t border-rule pt-4">
+                <p className="text-xs text-muted font-medium mb-2">Location</p>
+                <div className="flex items-center gap-2 text-ink text-sm">
+                  <MapPin size={16} className="text-accent" aria-hidden="true" />
+                  <span>New Delhi, India</span>
                 </div>
+                <p className="text-xs text-muted mt-1">Available for remote roles</p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* EXPERIENCE - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-5 relative overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 rounded-full blur-[80px] sm:blur-[120px] -z-10 group-hover:bg-blue-500/10 transition-colors duration-700"></div>
-
-          <div className="flex items-center gap-3 mb-8 sm:mb-10">
-            <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-              <Activity size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
+        {/* PROJECTS */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              <Code2 size={18} className="text-muted" aria-hidden="true" />
+              <h3 className="text-lg font-medium text-ink">Selected Projects</h3>
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Professional Experience</h3>
-          </div>
-
-          <div className="relative pl-6 sm:pl-8 border-l-2 border-zinc-800/50 flex-1 ml-2 sm:ml-4">
-            <div className="absolute w-3 h-3 sm:w-4 sm:h-4 bg-zinc-950 border-2 border-blue-500 rounded-full -left-[7.5px] sm:-left-[9px] top-1 sm:top-1.5 shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3">
-              <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
-              <span className="text-zinc-400 text-xs sm:text-sm font-mono mt-2 sm:mt-0 bg-white/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/5 shadow-sm inline-block w-fit">Aug 2025 - Jan 2026</span>
-            </div>
-
-            <p className="text-blue-400 font-semibold mb-6 sm:mb-8 text-base sm:text-lg">Data Scientist Trainee</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-              <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
-                  <Database size={32} className="sm:w-10 sm:h-10" />
-                </div>
-                <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div> Data Pipelines</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Built automated Python and R data cleaning pipelines, cutting data preparation time by 30%.</p>
-              </div>
-              <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
-                  <Cpu size={32} className="sm:w-10 sm:h-10" />
-                </div>
-                <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div> ML Architecture</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Designed and deployed cloud ML pipelines across AWS (S3, SageMaker) and Azure.</p>
-              </div>
-              <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
-                  <Terminal size={32} className="sm:w-10 sm:h-10" />
-                </div>
-                <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div> Model Deployment</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Deployed Random Forest and CNN models behind Flask APIs for production workloads.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* PROJECTS - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-6 relative overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 mb-8 sm:mb-10">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <Bot size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Machine Learning Models & Projects</h3>
-            </div>
-            <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="text-xs sm:text-sm font-medium text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors bg-white/5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/5 w-fit">
-              View All Repos <ExternalLink size={14} className="sm:w-[14px] sm:h-[14px] w-3 h-3" />
+            <a
+              href="https://github.com/Abhi20O1"
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs font-medium text-muted hover:text-ink transition-colors flex items-center gap-1"
+            >
+              All repositories <ExternalLink size={12} aria-hidden="true" />
             </a>
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-16 sm:py-20">
-              <div className="w-8 h-8 border-2 border-zinc-700 border-t-white rounded-full animate-spin"></div>
+            <div className="console-panel p-12 flex justify-center">
+              <span className="text-xs font-mono text-muted">Loading repositories…</span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {projects.slice(0, 6).map((proj) => (
                 <a
                   key={proj.id}
                   href={proj.html_url !== '#' ? proj.html_url : undefined}
                   target={proj.html_url !== '#' ? "_blank" : undefined}
-                  className="group/card flex flex-col bg-zinc-900/40 rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-white/5 hover:border-indigo-500/30 hover:bg-zinc-800/60 hover:-translate-y-1 transition-all duration-500 shadow-inner hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden h-full"
+                  rel="noreferrer"
+                  className="console-panel p-5 flex flex-col justify-between hover:border-rule-2 transition-colors group block"
                 >
-                  <div className="absolute -top-10 -right-10 w-24 sm:w-32 h-24 sm:h-32 bg-white/5 rounded-full blur-[30px] sm:blur-[40px] -z-10 group-hover/card:bg-blue-500/20 transition-colors duration-500"></div>
-
-                  <div className="flex justify-between items-start mb-4 sm:mb-5">
-                    <div className="p-2 sm:p-2.5 bg-zinc-950 rounded-lg sm:rounded-xl text-zinc-400 group-hover/card:text-white transition-colors border border-white/5 shadow-inner">
-                      <Code2 size={16} className="sm:w-[18px] sm:h-[18px]" />
-                    </div>
-                    {proj.language && (
-                      <span className="text-[10px] sm:text-[11px] font-bold text-zinc-300 bg-zinc-950 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md border border-white/5">
-                        {proj.language}
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="text-xs font-mono text-muted bg-paper-3 px-2 py-0.5 rounded border border-rule">
+                        {proj.language || 'Code'}
                       </span>
-                    )}
+                      {proj.html_url !== '#' && (
+                        <ExternalLink size={13} className="text-muted group-hover:text-ink transition-colors" aria-hidden="true" />
+                      )}
+                    </div>
+                    <h4 className="text-sm font-semibold text-ink group-hover:text-accent transition-colors line-clamp-1">
+                      {proj.title}
+                    </h4>
+                    <p className="text-xs text-muted mt-2 leading-relaxed line-clamp-3">
+                      {proj.description}
+                    </p>
                   </div>
-                  <h4 className="text-[17px] sm:text-[19px] font-bold mb-2 sm:mb-3 text-zinc-100 group-hover/card:text-blue-400 transition-colors line-clamp-1">
-                    {proj.title}
-                  </h4>
-                  <p className="text-zinc-400 text-xs sm:text-[15px] leading-relaxed flex-1 line-clamp-3 font-light group-hover/card:text-zinc-300 transition-colors">
-                    {proj.description}
-                  </p>
                 </a>
               ))}
             </div>
           )}
-        </div>
+        </section>
 
-        {/* CONTRIBUTIONS - 6 cols */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-6 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-6 flex flex-col justify-center items-center overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full mb-6 sm:mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300 w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
+        {/* ACTIVITY & CODING PROFILES */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* GitHub Activity */}
+          <div className="lg:col-span-6 space-y-4">
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-lg font-medium text-ink">GitHub Activity</h3>
+              <div className="flex items-center gap-1 bg-paper-3 p-1 rounded-md border border-rule text-xs">
+                <button
+                  type="button"
+                  onClick={() => setCalendarRange('6months')}
+                  className={`px-2 py-0.5 rounded transition-colors ${
+                    calendarRange === '6months' ? 'bg-paper-2 text-ink font-medium' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  6 Months
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCalendarRange('year')}
+                  className={`px-2 py-0.5 rounded transition-colors ${
+                    calendarRange === 'year' ? 'bg-paper-2 text-ink font-medium' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  Full Year
+                </button>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">GitHub Activity</h3>
             </div>
-            <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5 text-[11px] font-medium self-start sm:self-auto">
-              <button
-                type="button"
-                onClick={() => setCalendarRange('6months')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  calendarRange === '6months'
-                    ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Last 6 Months
-              </button>
-              <button
-                type="button"
-                onClick={() => setCalendarRange('year')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  calendarRange === 'year'
-                    ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Full Year
-              </button>
-            </div>
-          </div>
 
-          <div
-            ref={calendarScrollRef}
-            className={`w-full overflow-x-auto no-scrollbar pb-2 flex ${calendarRange === '6months' ? 'justify-start sm:justify-center' : 'justify-start'}`}
-          >
-            <div className={`${calendarRange === '6months' ? 'min-w-fit' : 'min-w-[700px] lg:min-w-full'} pr-4 sm:pr-0`}>
-              <GitHubCalendar
-                username="Abhi20O1"
-                colorScheme="dark"
-                transformData={calendarRange === '6months' ? selectLastHalfYear : undefined}
-                labels={
-                  calendarRange === '6months'
-                    ? { totalCount: '{{count}} contributions in the last 6 months' }
-                    : undefined
-                }
-                theme={{
-                  dark: ['rgba(255,255,255,0.02)', 'rgba(59,130,246,0.3)', 'rgba(59,130,246,0.5)', 'rgba(59,130,246,0.8)', 'rgba(59,130,246,1)'],
-                }}
-                style={{ color: '#a1a1aa' }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* ALGORITHMIC PROBLEM SOLVING (LEETCODE & HACKERRANK) - 6 cols */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-6 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-6 flex flex-col justify-center items-center">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full mb-6 sm:mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300 w-4 h-4 sm:w-5 sm:h-5"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
+            <div className="console-panel p-6 flex flex-col justify-center overflow-hidden">
+              <div
+                ref={calendarScrollRef}
+                className="w-full overflow-x-auto no-scrollbar pb-2 flex justify-start sm:justify-center"
+              >
+                <div className="min-w-fit pr-2">
+                  <GitHubCalendar
+                    username="Abhi20O1"
+                    colorScheme="dark"
+                    transformData={calendarRange === '6months' ? selectLastHalfYear : undefined}
+                    labels={
+                      calendarRange === '6months'
+                        ? { totalCount: '{{count}} contributions in the last 6 months' }
+                        : undefined
+                    }
+                    theme={{
+                      dark: [
+                        'oklch(13.5% 0.007 250)',
+                        'oklch(29% 0.05 245)',
+                        'oklch(52% 0.1 245)',
+                        'oklch(77% 0.12 245)',
+                        'oklch(82% 0.15 80)'
+                      ],
+                    }}
+                    style={{ color: 'var(--color-muted)' }}
+                  />
+                </div>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Algorithmic Problem Solving</h3>
-            </div>
-            <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5 text-[11px] font-medium self-start sm:self-auto">
-              <button
-                type="button"
-                onClick={() => setAlgoPlatform('hackerrank')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  algoPlatform === 'hackerrank'
-                    ? 'bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                HackerRank
-              </button>
-              <button
-                type="button"
-                onClick={() => setAlgoPlatform('leetcode')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  algoPlatform === 'leetcode'
-                    ? 'bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                LeetCode
-              </button>
             </div>
           </div>
 
-          {algoPlatform === 'hackerrank' ? (
-            <a
-              href="https://www.hackerrank.com/profile/abhi28031"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full flex justify-center group/img relative"
-            >
-              <div className="relative w-full max-w-[500px]">
-                <div className="absolute inset-0 bg-emerald-500/20 blur-[20px] sm:blur-[30px] rounded-xl sm:rounded-2xl -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
-                <div className="w-full rounded-xl sm:rounded-2xl p-6 bg-zinc-950/80 border border-white/10 group-hover/img:border-emerald-500/40 shadow-2xl transition-all duration-300 flex flex-col justify-between min-h-[220px]">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-inner">
-                        <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg>
+          {/* Problem Solving: HackerRank & LeetCode */}
+          <div className="lg:col-span-6 space-y-4">
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-lg font-medium text-ink">Problem Solving</h3>
+              <div className="flex items-center gap-1 bg-paper-3 p-1 rounded-md border border-rule text-xs">
+                <button
+                  type="button"
+                  onClick={() => setAlgoPlatform('hackerrank')}
+                  className={`px-2 py-0.5 rounded transition-colors ${
+                    algoPlatform === 'hackerrank' ? 'bg-paper-2 text-ink font-medium' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  HackerRank
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAlgoPlatform('leetcode')}
+                  className={`px-2 py-0.5 rounded transition-colors ${
+                    algoPlatform === 'leetcode' ? 'bg-paper-2 text-ink font-medium' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  LeetCode
+                </button>
+              </div>
+            </div>
+
+            <div className="console-panel p-6 flex flex-col justify-center min-h-[195px]">
+              {algoPlatform === 'hackerrank' ? (
+                <a
+                  href="https://www.hackerrank.com/profile/abhi28031"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="space-y-4 group block"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-md bg-paper-3 border border-rule flex items-center justify-center text-ok">
+                        <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg>
                       </div>
                       <div>
-                        <h4 className="text-white font-bold text-base flex items-center gap-1.5">
-                          HackerRank
-                        </h4>
-                        <p className="text-xs text-zinc-400 font-mono">@abhi28031</p>
+                        <p className="text-sm font-semibold text-ink">HackerRank</p>
+                        <p className="text-xs font-mono text-muted">@abhi28031</p>
                       </div>
                     </div>
-                    <span className="text-xs text-emerald-400 font-medium flex items-center gap-1 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                      Verified <ExternalLink size={12} />
+                    <span className="text-xs text-muted group-hover:text-ink transition-colors flex items-center gap-1">
+                      Profile <ExternalLink size={12} aria-hidden="true" />
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 my-4">
-                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="console-subpanel p-3">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-semibold text-zinc-200">SQL</span>
-                        <span className="text-xs font-bold text-amber-400">★ ★ ★</span>
+                        <span className="text-xs font-medium text-ink">SQL</span>
+                        <div className="flex items-center gap-0.5 text-accent" aria-label="Three stars">
+                          <Star size={12} className="fill-accent text-accent" aria-hidden="true" />
+                          <Star size={12} className="fill-accent text-accent" aria-hidden="true" />
+                          <Star size={12} className="fill-accent text-accent" aria-hidden="true" />
+                        </div>
                       </div>
-                      <p className="text-[11px] text-zinc-400">24 Challenges Solved · Gold / Silver</p>
+                      <p className="text-xs text-muted font-mono">24 Solved</p>
                     </div>
-                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5">
+
+                    <div className="console-subpanel p-3">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-semibold text-zinc-200">C++</span>
-                        <span className="text-xs font-bold text-amber-400">★</span>
+                        <span className="text-xs font-medium text-ink">C++</span>
+                        <div className="flex items-center gap-0.5 text-accent" aria-label="One star">
+                          <Star size={12} className="fill-accent text-accent" aria-hidden="true" />
+                        </div>
                       </div>
-                      <p className="text-[11px] text-zinc-400">Language Proficiency Verified</p>
+                      <p className="text-xs text-muted font-mono">Proficiency Verified</p>
                     </div>
                   </div>
+                </a>
+              ) : (
+                <a
+                  href="https://leetcode.com/u/abhi28031/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex justify-center group"
+                >
+                  <img
+                    src="https://leetcard.jacoblin.cool/abhi28031?theme=dark&font=Geist&ext=activity"
+                    alt="LeetCode statistics for abhi28031"
+                    className="w-full max-w-md rounded-md border border-rule group-hover:border-rule-2 transition-colors"
+                  />
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-zinc-400">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Active Competitor
-                    </span>
-                    <span className="text-emerald-400 group-hover/img:translate-x-0.5 transition-transform font-medium">View Badges & Challenges →</span>
-                  </div>
-                </div>
-              </div>
-            </a>
-          ) : (
-            <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="w-full flex justify-center group/img relative">
-              <div className="relative w-full max-w-[500px]">
-                <div className="absolute inset-0 bg-orange-500/20 blur-[20px] sm:blur-[30px] rounded-xl sm:rounded-2xl -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
-                <img
-                  src="https://leetcard.jacoblin.cool/abhi28031?theme=dark&font=Geist&ext=activity"
-                  alt="LeetCode Stats"
-                  className="w-full rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 group-hover/img:border-white/30 transition-all duration-300"
-                />
-              </div>
-            </a>
-          )}
-        </div>
-
-        {/* CONTACT FORM - 12 cols */}
-        <div id="contact" className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-6 relative overflow-hidden scroll-mt-24 sm:scroll-mt-32">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -z-10 group-hover:bg-blue-500/20 transition-colors duration-700"></div>
-
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                  <Mail size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Let's Work Together</h3>
-              </div>
-              <p className="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-md">
-                Open to full-time roles and contract projects. If you need a data scientist to build and ship practical ML systems, let's talk.
+        {/* CONTACT SECTION */}
+        <section id="contact" className="console-panel p-6 sm:p-10 scroll-mt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-5 space-y-3">
+              <h3 className="text-xl sm:text-2xl font-medium text-ink">Let’s Work Together</h3>
+              <p className="text-sm text-muted leading-relaxed">
+                Open to full-time roles and contract projects. If you need a data scientist to build and ship practical ML systems, let’s talk.
               </p>
+              <div className="pt-2 text-xs text-muted space-y-1">
+                <p>Location: New Delhi, India</p>
+                <p>Email: abhi28031@gmail.com</p>
+              </div>
             </div>
 
-            <div className="flex-[1.5] w-full">
-              <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+            <div className="lg:col-span-7">
+              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                 {formError && (
-                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2.5 rounded-xl text-sm font-medium animate-fade-in-up">
+                  <div className="bg-bad-soft border border-bad text-ink px-3.5 py-2 rounded-md text-xs">
                     {formError}
                   </div>
                 )}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
-                    <label htmlFor="name" className="sr-only">Name</label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-medium text-muted mb-1.5">
+                      Name
+                    </label>
                     <input
                       type="text"
                       id="name"
                       value={contactName}
                       onChange={(e) => { setContactName(e.target.value); if (formError) setFormError(""); }}
                       placeholder="Your name"
-                      className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner ${formError === "Please enter your name!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-indigo-500/50 focus:ring-indigo-500/50"}`}
+                      className="w-full bg-paper-3 border border-rule rounded-pill px-3.5 py-2 text-sm text-ink placeholder:text-muted focus:border-rule-2 transition-colors"
                     />
                   </div>
-                  <div className="flex-1">
-                    <label htmlFor="email" className="sr-only">Email</label>
+
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-medium text-muted mb-1.5">
+                      Email
+                    </label>
                     <input
                       type="email"
                       id="email"
                       value={contactEmail}
                       onChange={(e) => { setContactEmail(e.target.value); if (formError) setFormError(""); }}
-                      placeholder="Your email"
-                      className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner ${formError === "Please enter your email!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-indigo-500/50 focus:ring-indigo-500/50"}`}
+                      placeholder="your.email@example.com"
+                      className="w-full bg-paper-3 border border-rule rounded-pill px-3.5 py-2 text-sm text-ink placeholder:text-muted focus:border-rule-2 transition-colors"
                     />
                   </div>
                 </div>
+
                 <div>
-                  <label htmlFor="message" className="sr-only">Message</label>
+                  <label htmlFor="message" className="block text-xs font-medium text-muted mb-1.5">
+                    Message
+                  </label>
                   <textarea
                     id="message"
                     rows={4}
                     value={contactMessage}
                     onChange={(e) => { setContactMessage(e.target.value); if (formError) setFormError(""); }}
-                    placeholder="What would you like to discuss?"
-                    className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner resize-none ${formError === "Please enter a message!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-indigo-500/50 focus:ring-indigo-500/50"}`}
+                    placeholder="Tell me about your project or opportunity…"
+                    className="w-full bg-paper-3 border border-rule rounded-card px-3.5 py-2.5 text-sm text-ink placeholder:text-muted focus:border-rule-2 transition-colors resize-none"
                     required
                   ></textarea>
                 </div>
-                <div className="mt-2 w-full flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
+
+                <div className="flex flex-wrap items-center justify-end gap-3 pt-1">
                   <button
                     type="button"
                     onClick={handleWhatsAppSubmit}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 px-6 py-3.5 rounded-xl font-bold text-sm transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                    className="px-4 py-2 rounded-pill bg-paper-3 border border-rule-2 text-ink text-xs font-semibold hover:border-muted transition-colors flex items-center gap-1.5"
                   >
-                    WhatsApp <MessageCircle size={16} />
+                    <MessageCircle size={14} aria-hidden="true" /> WhatsApp
                   </button>
                   <button
                     type="button"
                     onClick={handleEmailSubmit}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-zinc-950 hover:bg-zinc-200 px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+                    className="px-5 py-2 rounded-pill bg-accent text-accent-ink text-xs font-semibold hover:opacity-95 transition-opacity flex items-center gap-1.5"
                   >
-                    Send Email <Send size={16} />
+                    <Send size={14} aria-hidden="true" /> Send Email
                   </button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
-
+        </section>
       </main>
 
       {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2 mt-6 sm:mt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-3 animate-fade-in-up text-center sm:text-left relative">
-        <div className="flex flex-col gap-2 items-center sm:items-start">
-          <p className="text-zinc-500 text-xs sm:text-sm font-medium">Abhishek Singh · Data Science, Machine Learning & Computer Vision</p>
-        </div>
-        <div className="flex gap-3 sm:gap-4">
-          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" title="GitHub" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg></a>
-          <a href="https://www.hackerrank.com/profile/abhi28031" target="_blank" rel="noreferrer" title="HackerRank" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg></a>
-          <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" title="LinkedIn" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg></a>
-          <a href="mailto:abhi28031@gmail.com" title="Email" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><Mail className="w-4 h-4 sm:w-5 sm:h-5" /></a>
+      <footer className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 mt-12 border-t border-rule flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted">
+        <p>Abhishek Singh · Data Science, Machine Learning & Computer Vision</p>
+
+        <div className="flex items-center gap-3">
+          <a
+            href="https://github.com/Abhi20O1"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub profile"
+            className="text-muted hover:text-ink transition-colors p-1"
+          >
+            <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
+          </a>
+          <a
+            href="https://www.hackerrank.com/profile/abhi28031"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="HackerRank profile"
+            className="text-muted hover:text-ink transition-colors p-1"
+          >
+            <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/abhishek-singh-sd"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn profile"
+            className="text-muted hover:text-ink transition-colors p-1"
+          >
+            <svg role="img" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
+          </a>
+          <a
+            href="mailto:abhi28031@gmail.com"
+            aria-label="Send email"
+            className="text-muted hover:text-ink transition-colors p-1"
+          >
+            <Mail size={16} aria-hidden="true" />
+          </a>
         </div>
       </footer>
     </div>
