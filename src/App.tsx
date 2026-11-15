@@ -101,7 +101,7 @@ export default function App() {
     setFormError("");
 
     const intro = `Hi Abhishek, I am ${contactName}${contactEmail ? ` (${contactEmail})` : ''} reaching out from your portfolio.`;
-    window.open(`https://wa.me/919315570085?text=${encodeURIComponent(`${intro}\n\n${contactMessage}`)}`, '_blank');
+    window.open(`https://wa.me/918126684451?text=${encodeURIComponent(`${intro}\n\n${contactMessage}`)}`, '_blank');
   };
 
   const scrollToContact = (e?: React.MouseEvent) => {
@@ -163,7 +163,7 @@ export default function App() {
                   readmeText = firstPara.replace(/[#*`_\[\]]/g, '').slice(0, 140).trim() + "...";
                 }
               }
-            } catch {}
+            } catch { }
 
             return {
               id: repo.id,
@@ -306,7 +306,7 @@ export default function App() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
                 <span className="text-[11px] text-emerald-300 font-mono tracking-wide uppercase">
-                  Available for High-Impact Roles · 2026
+                  Available for AI/ML Roles
                 </span>
               </div>
 
@@ -315,7 +315,7 @@ export default function App() {
                   Abhishek Singh
                 </h1>
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold gradient-text tracking-tight mt-2 sm:mt-3">
-                  AI Systems Engineer & Data Scientist
+                  AI/ML Engineer & Data Scientist
                 </h2>
               </div>
 
@@ -369,7 +369,7 @@ export default function App() {
                   <span>Arcap REIT AI Solution</span>
                 </span>
                 <span>•</span>
-                <span>IIT Guwahati (AI & Data Science)</span>
+                <span>IIT Guwahati (Data Science)</span>
                 <span>•</span>
                 <span>HackerRank 3★ SQL Gold Rank</span>
               </div>
@@ -497,11 +497,10 @@ export default function App() {
                     key={step.num}
                     type="button"
                     onClick={() => setActivePipelineStep(idx)}
-                    className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${
-                      activePipelineStep === idx
+                    className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${activePipelineStep === idx
                         ? 'border-indigo-500/50 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.15)]'
                         : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-mono text-indigo-400 font-bold">Stage {step.num}</span>
@@ -549,7 +548,7 @@ export default function App() {
                 {"// Deep Learning & LLMs"}
               </span>
               <div className="flex flex-wrap gap-2">
-                {['PyTorch', 'Transformers', 'vLLM', 'FlashAttention', 'LoRA / PEFT', 'Hugging Face', 'Scikit-learn'].map((s) => (
+                {['PyTorch', 'Transformers', 'LLM', 'Hugging Face', 'Scikit-learn'].map((s) => (
                   <span key={s} className="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono">
                     {s}
                   </span>
@@ -562,7 +561,7 @@ export default function App() {
                 {"// Multimodal & Document AI"}
               </span>
               <div className="flex flex-wrap gap-2">
-                {['ColBERT', 'BGE-M3', 'PaddleOCR', 'Nougat', 'OpenCV', 'YOLO', 'LangChain', 'LlamaIndex'].map((s) => (
+                {['OpenCV', 'YOLO', 'LangChain', 'LlamaIndex'].map((s) => (
                   <span key={s} className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-mono">
                     {s}
                   </span>
@@ -575,7 +574,7 @@ export default function App() {
                 {"// Databases & Vector Stores"}
               </span>
               <div className="flex flex-wrap gap-2">
-                {['Milvus', 'Qdrant', 'FAISS', 'PostgreSQL', 'pgvector', 'Redis', 'SQL'].map((s) => (
+                {['PostgreSQL', 'pgvector', 'Redis', 'SQL'].map((s) => (
                   <span key={s} className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono">
                     {s}
                   </span>
@@ -588,7 +587,7 @@ export default function App() {
                 {"// Systems & Cloud Infra"}
               </span>
               <div className="flex flex-wrap gap-2">
-                {['Python', 'C++', 'FastAPI', 'Docker', 'Kubernetes', 'AWS (S3, SageMaker)', 'Linux', 'Git'].map((s) => (
+                {['Python', 'C++', 'FastAPI', 'Docker', 'AWS (S3, SageMaker)', 'Linux', 'Git'].map((s) => (
                   <span key={s} className="px-2.5 py-1 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono">
                     {s}
                   </span>
@@ -616,22 +615,20 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setAlgoPlatform('hackerrank')}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  algoPlatform === 'hackerrank'
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${algoPlatform === 'hackerrank'
                     ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200'
-                }`}
+                  }`}
               >
                 HackerRank
               </button>
               <button
                 type="button"
                 onClick={() => setAlgoPlatform('leetcode')}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  algoPlatform === 'leetcode'
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${algoPlatform === 'leetcode'
                     ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200'
-                }`}
+                  }`}
               >
                 LeetCode
               </button>
@@ -791,18 +788,16 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setCalendarRange('6months')}
-                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
-                    calendarRange === '6months' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
-                  }`}
+                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${calendarRange === '6months' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
+                    }`}
                 >
                   6 Months
                 </button>
                 <button
                   type="button"
                   onClick={() => setCalendarRange('year')}
-                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
-                    calendarRange === 'year' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
-                  }`}
+                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${calendarRange === 'year' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
+                    }`}
                 >
                   Full Year
                 </button>
@@ -855,36 +850,26 @@ export default function App() {
             <div className="p-6 rounded-2xl bg-zinc-950/70 border border-white/10 flex flex-col justify-between gap-4">
               <div>
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-indigo-400 font-bold">8.41 CPI / 10.0</span>
-                  <span className="text-zinc-500">2021 - 2024</span>
+                  <span className="text-zinc-500">2025 - 2026</span>
                 </div>
                 <h4 className="text-lg font-bold text-white mt-2">Indian Institute of Technology (IIT) Guwahati</h4>
-                <p className="text-sm text-indigo-300 font-medium mt-0.5">Minor in Data Science & Artificial Intelligence</p>
+                <p className="text-sm text-indigo-300 font-medium mt-0.5">Data Science & Artificial Intelligence</p>
                 <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
                   Focus: Advanced Machine Learning, Deep Neural Networks, Linear Algebra, Convex Optimization, and Probability Theory.
                 </p>
-              </div>
-              <div className="pt-3 border-t border-white/10 flex items-center gap-2 text-xs text-zinc-400">
-                <CheckCircle2 size={14} className="text-emerald-400" />
-                <span>Verified Academic Credentials</span>
               </div>
             </div>
 
             <div className="p-6 rounded-2xl bg-zinc-950/70 border border-white/10 flex flex-col justify-between gap-4">
               <div>
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-blue-400 font-bold">8.16 CGPA / 10.0</span>
                   <span className="text-zinc-500">2020 - 2024</span>
                 </div>
                 <h4 className="text-lg font-bold text-white mt-2">JSS Academy of Technical Education, Noida</h4>
                 <p className="text-sm text-blue-300 font-medium mt-0.5">B.Tech in Computer Science & Engineering</p>
                 <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
-                  Focus: Data Structures & Algorithms, Distributed Systems, Operating Systems, Database Management Systems, and Networks.
+                  Focus: Data Structures & Algorithms, Distributed Systems, Operating Systems, Database Management and System Networks.
                 </p>
-              </div>
-              <div className="pt-3 border-t border-white/10 flex items-center gap-2 text-xs text-zinc-400">
-                <CheckCircle2 size={14} className="text-emerald-400" />
-                <span>Verified Academic Credentials</span>
               </div>
             </div>
           </div>
@@ -908,11 +893,11 @@ export default function App() {
               <div className="flex flex-col gap-3 text-xs text-zinc-400 font-mono">
                 <div className="flex items-center gap-2">
                   <Mail size={14} className="text-indigo-400" />
-                  <span>as2001abhi@gmail.com</span>
+                  <span>abhi28031@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MessageCircle size={14} className="text-emerald-400" />
-                  <span>+91 9315570085 (WhatsApp Available)</span>
+                  <span>+91 8126684451 (WhatsApp Available)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin size={14} className="text-amber-400" />
