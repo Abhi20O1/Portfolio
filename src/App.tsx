@@ -57,13 +57,6 @@ export default function App() {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const selectLastHalfYear = (contributions: GitHubActivity[]) => {
-    const cutoffDate = new Date();
-    cutoffDate.setMonth(cutoffDate.getMonth() - 6);
-    const cutoffStr = cutoffDate.toISOString().slice(0, 10);
-    return contributions.filter((activity) => activity.date >= cutoffStr);
-  };
-
   useEffect(() => {
     const el = calendarScrollRef.current;
     if (!el) return;
