@@ -395,7 +395,6 @@ export default function App() {
                   {/* Floating Micro-Badge Top Right */}
                   <div className="absolute top-4 right-4 bg-zinc-950/80 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                     <Zap size={13} className="text-amber-400" />
-                    <span className="text-[11px] font-mono text-zinc-200">99.2% OCR Fidelity</span>
                   </div>
 
                   {/* Floating Micro-Badge Bottom Left */}
@@ -412,41 +411,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* PRODUCTION IMPACT METRICS STRIP */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 animate-fade-in-up stagger-2">
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              99.2<span className="text-indigo-400 text-2xl">%</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">OCR & Table Accuracy</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Tested on 10M+ legal deeds</div>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              &lt;420<span className="text-blue-400 text-2xl">ms</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">p95 Query Latency</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Hybrid dense-sparse reranking</div>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              10<span className="text-purple-400 text-2xl">M+</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">Financial Pages Parsed</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Production deeds & covenants</div>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 tracking-tight">
-              0.00<span className="text-emerald-400 text-2xl">%</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">Hallucination Rate</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Deterministic AST guardrails</div>
           </div>
         </section>
 
@@ -498,8 +462,8 @@ export default function App() {
                     type="button"
                     onClick={() => setActivePipelineStep(idx)}
                     className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${activePipelineStep === idx
-                        ? 'border-indigo-500/50 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.15)]'
-                        : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
+                      ? 'border-indigo-500/50 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.15)]'
+                      : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
                       }`}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -616,8 +580,8 @@ export default function App() {
                 type="button"
                 onClick={() => setAlgoPlatform('hackerrank')}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${algoPlatform === 'hackerrank'
-                    ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shadow-sm'
+                  : 'text-zinc-400 hover:text-zinc-200'
                   }`}
               >
                 HackerRank
@@ -626,8 +590,8 @@ export default function App() {
                 type="button"
                 onClick={() => setAlgoPlatform('leetcode')}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${algoPlatform === 'leetcode'
-                    ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 shadow-sm'
+                  : 'text-zinc-400 hover:text-zinc-200'
                   }`}
               >
                 LeetCode
