@@ -280,12 +280,12 @@ export default function App() {
                   Abhishek Singh
                 </h1>
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold gradient-text tracking-tight mt-2 sm:mt-3">
-                  AI & Data Scientist · System Design Specialist
+                  AI & Data Scientist
                 </h2>
               </div>
 
               <p className="text-zinc-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl font-light">
-                Specialized in <span className="text-white font-medium">Data Cleaning & Feature Engineering</span>, scalable <span className="text-white font-medium">System Architecture Design</span>, and high-performance ML pipelines across Healthcare, Autonomous Robotics, and Computer Vision.
+                Specialized in <span className="text-white font-medium">Data Cleaning & Feature Engineering</span>, scalable <span className="text-white font-medium">System Architecture Design</span>, and high-performance ML pipelines across Healthcare, and Computer Vision.
               </p>
 
               {/* Action Buttons */}
@@ -333,8 +333,6 @@ export default function App() {
                   <ShieldCheck size={14} className="text-indigo-400" />
                   <span>Data Science Trainee · Arcap REIT</span>
                 </span>
-                <span>•</span>
-                <span>Data Cleaning & System Design</span>
                 <span>•</span>
                 <span>IIT Guwahati (Data Science)</span>
                 <span>•</span>
