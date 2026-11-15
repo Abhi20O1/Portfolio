@@ -151,7 +151,7 @@ export default function App() {
                 const text = await readmeRes.text();
                 const firstPara = text.split('\n\n').find((p: string) => p.trim() && !p.startsWith('#') && !p.startsWith('[!'));
                 if (firstPara) {
-                  readmeText = firstPara.replace(/[#*`_\[\]]/g, '').slice(0, 140).trim() + "...";
+                  readmeText = firstPara.replace(/[#*`_[\]]/g, '').slice(0, 140).trim() + "...";
                 }
               }
             } catch { }
