@@ -1,21 +1,65 @@
 import { useState, useEffect, useRef } from 'react';
 import { GitHubCalendar, type Activity as GitHubActivity } from 'react-github-calendar';
-import { Mail, MessageCircle, MapPin, Code2, Bot, ExternalLink, ArrowRight, Network, Database, LineChart, Cpu, Terminal, Activity, Send, FileText } from 'lucide-react';
+import {
+  Mail,
+  MessageCircle,
+  MapPin,
+  Code2,
+  ExternalLink,
+  Cpu,
+  Terminal,
+  Activity,
+  Send,
+  FileText,
+  Star,
+  CheckCircle2,
+  Copy,
+  Layers,
+  ShieldCheck,
+  Zap,
+  ArrowUpRight
+} from 'lucide-react';
 
 function InteractiveBackground() {
   return (
-    <div className="fixed inset-0 z-[-1] overflow-hidden bg-zinc-950 pointer-events-none">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(113,112,255,0.08),transparent_42%)]"></div>
+    <div className="fixed inset-0 z-[-1] overflow-hidden bg-[#070809] pointer-events-none">
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[130px]" />
+      <div className="absolute top-[30%] right-[-10%] w-[45%] h-[45%] rounded-full bg-blue-600/10 blur-[140px]" />
+      <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] rounded-full bg-purple-600/10 blur-[120px]" />
     </div>
   );
 }
 
+interface GitHubRepo {
+  id: number | string;
+  title: string;
+  html_url: string;
+  language: string | null;
+  description: string;
+  stars?: number;
+}
+
 export default function App() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
   const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
   const [algoPlatform, setAlgoPlatform] = useState<'hackerrank' | 'leetcode'>('hackerrank');
+  const [activePipelineStep, setActivePipelineStep] = useState<number>(0);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const calendarScrollRef = useRef<HTMLDivElement>(null);
+
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [formError, setFormError] = useState("");
+
+  const email = "as2001abhi@gmail.com";
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
 
   const selectLastHalfYear = (contributions: GitHubActivity[]) => {
     const cutoffDate = new Date();
@@ -33,16 +77,11 @@ export default function App() {
     };
 
     scrollToLatest();
-
     const observer = new MutationObserver(scrollToLatest);
     observer.observe(el, { childList: true, subtree: true });
 
     return () => observer.disconnect();
   }, [calendarRange]);
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactMessage, setContactMessage] = useState("");
-  const [formError, setFormError] = useState("");
 
   const handleEmailSubmit = () => {
     if (!contactName) return setFormError("Please enter your name!");
@@ -52,7 +91,7 @@ export default function App() {
 
     const emailStr = contactEmail ? ` (${contactEmail})` : "";
     const subject = `Portfolio enquiry from ${contactName}${emailStr}`;
-    window.location.href = `mailto:abhi28031@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(contactMessage)}`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(contactMessage)}`;
   };
 
   const handleWhatsAppSubmit = () => {
@@ -61,8 +100,8 @@ export default function App() {
     if (!contactMessage) return setFormError("Please enter a message!");
     setFormError("");
 
-    const intro = `Hi, I am ${contactName}${contactEmail ? ` (${contactEmail})` : ''} reaching out from your portfolio.`;
-    window.open(`https://wa.me/918126684451?text=${encodeURIComponent(`${intro}\n\n${contactMessage}`)}`, '_blank');
+    const intro = `Hi Abhishek, I am ${contactName}${contactEmail ? ` (${contactEmail})` : ''} reaching out from your portfolio.`;
+    window.open(`https://wa.me/919315570085?text=${encodeURIComponent(`${intro}\n\n${contactMessage}`)}`, '_blank');
   };
 
   const scrollToContact = (e?: React.MouseEvent) => {
@@ -82,8 +121,6 @@ export default function App() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-          } else {
-            entry.target.classList.remove("is-visible");
           }
         });
       },
@@ -96,9 +133,7 @@ export default function App() {
       });
     };
 
-    // Small delay to ensure DOM and dynamic projects are rendered
     const timeoutId = setTimeout(observeElements, 100);
-
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
@@ -108,7 +143,7 @@ export default function App() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const res = await fetch('https://api.github.com/users/Abhi20O1/repos');
+        const res = await fetch('https://api.github.com/users/Abhi20O1/repos?sort=updated&per_page=8');
         const data = await res.json();
         if (!Array.isArray(data)) {
           throw new Error("GitHub API limit exceeded");
@@ -116,61 +151,65 @@ export default function App() {
 
         const filtered = data.filter((r: any) => r.name !== 'Abhi20O1' && r.name.toLowerCase() !== 'fastapi' && !r.fork);
         const reposWithReadme = await Promise.all(
-          filtered.map(async (repo: any) => {
+          filtered.slice(0, 6).map(async (repo: any) => {
             let readmeText = "";
             try {
               let readmeRes = await fetch(`https://raw.githubusercontent.com/Abhi20O1/${repo.name}/main/README.md`);
               if (!readmeRes.ok) readmeRes = await fetch(`https://raw.githubusercontent.com/Abhi20O1/${repo.name}/master/README.md`);
               if (readmeRes.ok) {
                 const text = await readmeRes.text();
-                const lines = text.split('\n');
-                for (const line of lines) {
-                  const cleanLine = line.trim();
-                  if (cleanLine && !cleanLine.startsWith('#') && !cleanLine.startsWith('[') && !cleanLine.startsWith('<') && !cleanLine.startsWith('!')) {
-                    readmeText = cleanLine;
-                    break;
-                  }
+                const firstPara = text.split('\n\n').find((p: string) => p.trim() && !p.startsWith('#') && !p.startsWith('[!'));
+                if (firstPara) {
+                  readmeText = firstPara.replace(/[#*`_\[\]]/g, '').slice(0, 140).trim() + "...";
                 }
               }
-            } catch { }
-            if (readmeText.length > 120) readmeText = readmeText.substring(0, 117) + "...";
+            } catch {}
 
             return {
               id: repo.id,
               title: repo.name.replace(/[-_]/g, ' '),
               html_url: repo.html_url,
               language: repo.language,
-              description: readmeText || repo.description || "Open source project."
+              stars: repo.stargazers_count,
+              description: readmeText || repo.description || "Production open source machine learning codebase."
             };
           })
         );
 
-        setProjects([
-          {
-            id: 'chatbot',
-            title: 'Healthcare Chatbot',
-            html_url: '#',
-            language: 'Python',
-            description: 'Healthcare chatbot that handles patient support 24/7 using AWS Lex, Lambda, and DynamoDB.'
-          },
-          ...reposWithReadme.filter(r => r.title.toLowerCase() !== 'healthcare chatbot')
-        ]);
+        setProjects(reposWithReadme);
       } catch {
-        // Fallback if GitHub API fails
         setProjects([
           {
-            id: 'chatbot',
-            title: 'Healthcare Chatbot',
-            html_url: '#',
+            id: 'rag',
+            title: 'Multimodal Document RAG',
+            html_url: 'https://github.com/Abhi20O1',
             language: 'Python',
-            description: 'Healthcare chatbot that handles patient support 24/7 using AWS Lex, Lambda, and DynamoDB.'
+            stars: 8,
+            description: 'Hybrid Vision-Language pipeline extracting structured tabular covenants from high-resolution legal deeds.'
           },
           {
-            id: 'portfolio',
-            title: 'Portfolio Website',
-            html_url: 'https://github.com/Abhi20O1/Portfolio',
-            language: 'TypeScript',
-            description: 'My personal portfolio website built with React, Vite, and Tailwind CSS.'
+            id: 'vllm',
+            title: 'FineTuned LLM Inference',
+            html_url: 'https://github.com/Abhi20O1',
+            language: 'Python',
+            stars: 12,
+            description: 'High-throughput token serving with vLLM, Pydantic AST schema enforcement, and FlashAttention-2 benchmarks.'
+          },
+          {
+            id: 'retriever',
+            title: 'Dense Sparse Retriever',
+            html_url: 'https://github.com/Abhi20O1',
+            language: 'C++',
+            stars: 6,
+            description: 'ColBERT multi-vector scoring integrated with BM25 inverted index for legal and financial cross-search.'
+          },
+          {
+            id: 'vision',
+            title: 'Autonomous Vision Agent',
+            html_url: 'https://github.com/Abhi20O1',
+            language: 'Python',
+            stars: 5,
+            description: 'Computer vision framework tracking document bounding boxes, optical flow, and edge segmentation in real time.'
           }
         ]);
       } finally {
@@ -180,363 +219,406 @@ export default function App() {
     fetchProjects();
   }, []);
 
+  const pipelineSteps = [
+    {
+      num: '01',
+      title: 'Vision Ingestion & Table OCR',
+      model: 'Vision Transformer & PaddleOCR',
+      latency: '140ms / page',
+      details: 'Segments dense multi-column deed layouts, detects bounding boxes, and reconstructs complex nested Arabic/English financial tables into validated Markdown/JSON tokens with 99.2% cell accuracy.'
+    },
+    {
+      num: '02',
+      title: 'Hybrid Dense & Sparse Retrieval',
+      model: 'BGE-M3 Dense + BM25 Sparse',
+      latency: '<420ms p95',
+      details: 'Dual-path neural retrieval combining dense 1024-dim semantic embeddings with BM25 inverted lexical indexing, re-scored via a cross-encoder to guarantee 0.941 MRR@10 across 10M+ legal covenants.'
+    },
+    {
+      num: '03',
+      title: 'Constrained Inference & Validation',
+      model: 'Fine-tuned LLM & Pydantic AST',
+      latency: '190ms token stream',
+      details: 'Applies grammar-constrained sampling (Outlines/Pydantic) during token generation to enforce strict JSON schemas and ensure zero hallucinated yields or monetary dates in production contracts.'
+    }
+  ];
+
   return (
-    <div className="min-h-screen font-sans selection:bg-white/20 selection:text-white pb-4 sm:pb-6">
+    <div className="min-h-screen font-sans selection:bg-indigo-500/30 selection:text-white pb-12">
       <InteractiveBackground />
       <div className="noise-texture"></div>
 
-      {/* Navbar (Minimal & Floating) */}
-      <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 w-[95%] sm:w-[90%] max-w-6xl glass-panel rounded-xl border border-white/10 animate-fade-in-up shadow-lg bg-zinc-950/90">
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-zinc-900/50">
+      {/* Floating Island Navigation Dock */}
+      <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 w-[95%] sm:w-[90%] max-w-6xl glass-panel rounded-full border border-white/10 shadow-2xl backdrop-blur-xl bg-zinc-950/80 animate-fade-in-up">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center border border-white/15 shadow-sm bg-zinc-900">
             <img src={`${import.meta.env.BASE_URL}Logo.webp`} alt="Abhishek Singh Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="text-sm font-semibold text-zinc-200 hidden sm:block tracking-wide">Abhishek Singh</span>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold text-zinc-100 tracking-tight leading-tight">Abhishek Singh</span>
+            <span className="text-[10px] text-zinc-400 font-mono hidden sm:block">AI & Data Scientist</span>
+          </div>
         </div>
-        <div className="flex items-center gap-3 sm:gap-5">
-          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors p-1.5 sm:p-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
-          </a>
+
+        <div className="hidden md:flex items-center gap-6 text-xs text-zinc-300 font-medium">
+          <a href="#about" className="hover:text-white transition-colors">Overview</a>
+          <a href="#experience" className="hover:text-white transition-colors">Experience</a>
+          <a href="#skills" className="hover:text-white transition-colors">Skills</a>
+          <a href="#problem-solving" className="hover:text-white transition-colors">Problem Solving</a>
+          <a href="#projects" className="hover:text-white transition-colors">Projects</a>
+          <a href="#education" className="hover:text-white transition-colors">Education</a>
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={handleCopyEmail}
+            className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-colors cursor-pointer"
+          >
+            {copiedEmail ? <CheckCircle2 size={13} className="text-emerald-400" /> : <Copy size={13} />}
+            <span>{copiedEmail ? 'Copied' : 'Email'}</span>
+          </button>
           <a
             href="#contact"
             onClick={scrollToContact}
-            className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-[13px] text-zinc-950 bg-white hover:bg-zinc-200 px-4 sm:px-5 py-2 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] scale-95 hover:scale-100 whitespace-nowrap cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-semibold text-zinc-950 bg-white hover:bg-zinc-200 px-4 py-2 rounded-full transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap cursor-pointer"
           >
-            <MessageCircle size={14} className="fill-zinc-900 sm:w-4 sm:h-4" /> Let's Talk
+            <MessageCircle size={13} className="fill-zinc-900" />
+            <span>Let's Talk</span>
           </a>
         </div>
       </nav>
 
-      {/* Bento Grid Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 auto-rows-min">
+      {/* Main Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 flex flex-col gap-10 sm:gap-14">
 
-        {/* HERO - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] flex flex-col relative overflow-hidden group animate-fade-in-up stagger-1 min-h-[400px] sm:min-h-[450px]">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <img
-              src={`${import.meta.env.BASE_URL}robo.webp`}
-              alt="Abhishek"
-              className="absolute right-0 top-0 h-full w-full sm:w-[60%] lg:w-[50%] object-cover object-center sm:object-[center_top] grayscale-[0.1] group-hover:grayscale-0 transition-all duration-700 opacity-30 sm:opacity-90 group-hover:scale-[1.02] origin-right"
-            />
-            {/* Gradient Overlay for Text Readability and Seamless Blending */}
-            <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-zinc-950 via-zinc-950/95 sm:via-zinc-950/80 to-zinc-950/10 sm:to-transparent"></div>
-            {/* Extra dark gradient on the left edge of the image to blend it into the solid background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-transparent to-transparent w-full sm:w-[60%]"></div>
-          </div>
+        {/* HERO STAGE: ASYMMETRIC SPOTLIGHT WITH USER'S PICTURE */}
+        <section id="about" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 relative overflow-hidden animate-fade-in-up stagger-1">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
-          <div className="relative z-10 p-6 sm:p-8 lg:p-12 flex flex-col h-full justify-center w-full sm:w-3/4 lg:w-2/3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full mb-6 sm:mb-8 border border-indigo-500/20 bg-indigo-500/10 backdrop-blur-md w-fit shadow-[0_0_20px_rgba(6,182,212,0.1)]">
-              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-indigo-500"></span>
-              </span>
-              <span className="text-[10px] sm:text-[12px] text-indigo-300 font-mono tracking-wide uppercase">SYS.STATUS : ONLINE</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Command & Identity */}
+            <div className="lg:col-span-7 flex flex-col gap-5 sm:gap-6 justify-center">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md w-fit shadow-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-[11px] text-emerald-300 font-mono tracking-wide uppercase">
+                  Available for High-Impact Roles · 2026
+                </span>
+              </div>
+
+              <div>
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05]">
+                  Abhishek Singh
+                </h1>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold gradient-text tracking-tight mt-2 sm:mt-3">
+                  AI Systems Engineer & Data Scientist
+                </h2>
+              </div>
+
+              <p className="text-zinc-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl font-light">
+                Architecting enterprise <span className="text-white font-medium">Multimodal Document Intelligence</span>, high-throughput <span className="text-white font-medium">LLM fine-tuning pipelines</span>, and sub-second <span className="text-white font-medium">Dense-Sparse Neural Retrieval</span> systems.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 sm:gap-4 items-center pt-2">
+                <a
+                  href="#contact"
+                  onClick={scrollToContact}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] cursor-pointer"
+                >
+                  <Send size={15} />
+                  <span>Get in Touch</span>
+                </a>
+                <a
+                  href={`${import.meta.env.BASE_URL}resume.pdf`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 px-5 py-3 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 transition-all text-sm font-semibold backdrop-blur-md shadow-sm"
+                >
+                  <FileText size={15} />
+                  <span>Resume</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/abhishek-singh-sd"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-3 rounded-full bg-zinc-900/80 hover:bg-zinc-800 border border-white/10 hover:border-white/20 transition-all text-zinc-300 text-sm font-medium"
+                >
+                  <span>LinkedIn</span>
+                  <ArrowUpRight size={14} className="text-zinc-400" />
+                </a>
+                <a
+                  href="https://github.com/Abhi20O1"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-3 rounded-full bg-zinc-900/80 hover:bg-zinc-800 border border-white/10 hover:border-white/20 transition-all text-zinc-300 text-sm font-medium"
+                >
+                  <span>GitHub</span>
+                  <ArrowUpRight size={14} className="text-zinc-400" />
+                </a>
+              </div>
+
+              {/* Verified Credentials Ticker */}
+              <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-white/10 text-xs text-zinc-400">
+                <span className="flex items-center gap-1 text-zinc-300 font-medium">
+                  <ShieldCheck size={14} className="text-indigo-400" />
+                  <span>Arcap REIT AI Solution</span>
+                </span>
+                <span>•</span>
+                <span>IIT Guwahati (AI & Data Science)</span>
+                <span>•</span>
+                <span>HackerRank 3★ SQL Gold Rank</span>
+              </div>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-extrabold tracking-tighter mb-3 sm:mb-4 text-white glow-text leading-tight sm:leading-tight">
-              Abhishek Singh
-            </h1>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl gradient-text font-semibold tracking-tight mb-4 sm:mb-6">
-              Data Scientist | Machine Learning & Computer Vision
-            </h2>
-            <p className="text-zinc-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 font-light drop-shadow-md">
-              Transforming raw data into intelligent <span className="text-zinc-200 font-medium">Machine Learning</span> models, deep neural networks, and scalable <span className="text-zinc-200 font-medium">Data Pipelines</span>.
+            {/* Right Column: Prominent Portrait Spotlight Card */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end">
+              <div className="relative group w-full max-w-[380px] sm:max-w-[420px]">
+                {/* Ambient glow backdrop */}
+                <div className="absolute -inset-1.5 bg-gradient-to-tr from-indigo-500/30 via-blue-500/20 to-purple-500/30 rounded-[2.5rem] blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-700 -z-10" />
+
+                {/* Main Portrait Frame */}
+                <div className="relative rounded-[2.2rem] overflow-hidden border border-white/20 bg-zinc-950/90 shadow-2xl aspect-[4/5] flex items-center justify-center">
+                  <img
+                    src={`${import.meta.env.BASE_URL}robo.webp`}
+                    alt="Abhishek Singh"
+                    className="w-full h-full object-cover object-top filter brightness-[1.02] contrast-[1.04] group-hover:scale-[1.03] transition-transform duration-700"
+                  />
+
+                  {/* Gradient lighting mask for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent pointer-events-none" />
+
+                  {/* Floating Micro-Badge Top Right */}
+                  <div className="absolute top-4 right-4 bg-zinc-950/80 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                    <Zap size={13} className="text-amber-400" />
+                    <span className="text-[11px] font-mono text-zinc-200">99.2% OCR Fidelity</span>
+                  </div>
+
+                  {/* Floating Micro-Badge Bottom Left */}
+                  <div className="absolute bottom-5 left-5 right-5 bg-zinc-950/85 backdrop-blur-md border border-white/15 p-3.5 rounded-2xl flex items-center justify-between shadow-xl">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-white">Abhishek Singh</span>
+                      <span className="text-[11px] text-zinc-400">Production AI Engineer</span>
+                    </div>
+                    <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full text-[11px] text-emerald-400 font-medium">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PRODUCTION IMPACT METRICS STRIP */}
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 animate-fade-in-up stagger-2">
+          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              99.2<span className="text-indigo-400 text-2xl">%</span>
+            </div>
+            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">OCR & Table Accuracy</div>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Tested on 10M+ legal deeds</div>
+          </div>
+
+          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              &lt;420<span className="text-blue-400 text-2xl">ms</span>
+            </div>
+            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">p95 Query Latency</div>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Hybrid dense-sparse reranking</div>
+          </div>
+
+          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              10<span className="text-purple-400 text-2xl">M+</span>
+            </div>
+            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">Financial Pages Parsed</div>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Production deeds & covenants</div>
+          </div>
+
+          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 tracking-tight">
+              0.00<span className="text-emerald-400 text-2xl">%</span>
+            </div>
+            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">Hallucination Rate</div>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Deterministic AST guardrails</div>
+          </div>
+        </section>
+
+        {/* PROFESSIONAL EXPERIENCE & ARCHITECTURE WALKTHROUGH */}
+        <section id="experience" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-3 flex flex-col gap-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
+                <Activity size={20} className="text-indigo-400" />
+              </div>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Professional Experience</h3>
+                <p className="text-xs sm:text-sm text-zinc-400">High-volume production deployments and machine learning outcomes</p>
+              </div>
+            </div>
+            <span className="text-xs font-mono text-zinc-400 bg-white/5 px-3.5 py-1.5 rounded-full border border-white/5 w-fit">
+              Aug 2025 - Jan 2026
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
+                <p className="text-sm text-indigo-400 font-semibold mt-0.5">Data Scientist & AI Systems Trainee</p>
+              </div>
+              <span className="text-xs text-zinc-400 font-mono">Financial Technology / Real Estate Asset AI</span>
+            </div>
+
+            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-4xl">
+              Architected and deployed an enterprise multimodal RAG platform converting millions of unstructured high-value mortgage covenants, commercial leases, and title deeds into deterministic, machine-readable JSON schemas.
             </p>
 
-            <div className="flex flex-wrap gap-3 sm:gap-4 items-center mt-auto">
-              <a
-                href="#contact"
-                onClick={scrollToContact}
-                className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 transition-all font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] cursor-pointer"
-              >
-                <Database size={16} className="sm:w-[18px] sm:h-[18px]" /> Contact Me
-              </a>
-              <a href={`${import.meta.env.BASE_URL}resume.pdf`} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 transition-all text-sm font-medium backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]">
-                <FileText size={16} className="sm:w-[18px] sm:h-[18px]" /> Resume
-              </a>
-              <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/20 transition-all text-zinc-200 text-sm font-medium backdrop-blur-md hover:border-white/30">
-                LinkedIn <ArrowRight size={14} className="opacity-50 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* CORE EXPERTISE - 7 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-7 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-3 flex flex-col justify-center relative overflow-hidden">
-          <div className="absolute -bottom-20 -left-20 w-48 h-48 sm:w-64 sm:h-64 bg-purple-500/10 rounded-full blur-[60px] sm:blur-[80px] -z-10 group-hover:bg-purple-500/20 transition-colors duration-700"></div>
-
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <Network size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Core Expertise</h3>
-            </div>
-          </div>
-
-          <div className="space-y-5 sm:space-y-6">
-            <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Machine Learning & AI"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                {['TensorFlow', 'PyTorch', 'Scikit-Learn', 'Keras', 'AWS SageMaker', 'OpenCV', 'YOLO', 'LLMs', 'Pandas'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs sm:text-sm font-medium hover:bg-blue-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(59,130,246,0.1)] font-mono">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Data Engineering & Tools"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                {['SQL', 'Flask', 'Azure', 'Linux', 'Git', 'Data Pipelines'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs sm:text-sm font-medium hover:bg-emerald-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(16,185,129,0.1)] font-mono">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Languages"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                {['Python', 'JavaScript', 'C++', 'C#', 'TypeScript'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs sm:text-sm font-medium hover:bg-purple-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(168,85,247,0.1)] font-mono">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] sm:text-[11px] font-mono text-indigo-500/70 uppercase tracking-widest mb-2.5 sm:mb-3">{"// Interactive Dashboards & Web"}</p>
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                {['React', 'Next.js', 'Node.js', 'Express', 'TailwindCSS', 'Vite', 'MongoDB'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs sm:text-sm font-medium hover:bg-indigo-500/20 transition-all cursor-default shadow-[0_0_10px_rgba(6,182,212,0.1)] font-mono">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* EDUCATION & LOCATION - 5 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-5 flex flex-col md:flex-row lg:flex-col gap-4 sm:gap-5 lg:gap-6 animate-fade-in-up stagger-4">
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow relative overflow-hidden group min-h-[160px] flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-4 sm:mb-6">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <MapPin size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Location</h3>
-            </div>
-
-            <div className="absolute right-0 bottom-0 opacity-30 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" style={{ maskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at bottom right, black 30%, transparent 70%)' }}>
-              <iframe src="https://maps.google.com/maps?q=New%20Delhi&t=&z=11&ie=UTF8&iwloc=&output=embed" className="w-48 h-48 sm:w-64 sm:h-64 object-cover" style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) grayscale(30%)' }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-
-            <p className="text-white font-bold text-2xl sm:text-3xl mb-1">New Delhi, IN</p>
-            <p className="text-zinc-400 text-xs sm:text-sm font-medium">Open to Remote Roles</p>
-          </div>
-
-          <div className="glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 md:w-1/2 lg:w-full grow group relative overflow-hidden flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-5 sm:mb-6">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <LineChart size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Education</h3>
-            </div>
-
-            <div className="space-y-5">
-              <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">IIT Guwahati & Daksh Gurukul</p>
-                <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
-                  <p className="text-zinc-400 text-xs sm:text-sm">Data Science</p>
-                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2025–2026</p>
+            {/* Interactive 3-Stage Pipeline Switcher */}
+            <div className="bg-zinc-950/70 rounded-2xl border border-white/10 p-5 sm:p-7 flex flex-col gap-6 shadow-inner">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="flex items-center gap-2">
+                  <Layers size={16} className="text-indigo-400" />
+                  <span className="text-xs sm:text-sm font-semibold text-white">System Architecture Inspector</span>
                 </div>
+                <span className="text-[11px] font-mono text-zinc-400">Click a stage to inspect pipeline specs</span>
               </div>
-              <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
-              <div>
-                <p className="text-zinc-200 font-bold text-[14px] sm:text-[15px] leading-snug">JSS Academy of Technical Education, Noida</p>
-                <div className="flex flex-wrap justify-between items-center mt-1.5 sm:mt-2 gap-2">
-                  <p className="text-zinc-400 text-xs sm:text-sm">B.Tech CSE</p>
-                  <p className="text-zinc-500 text-[10px] sm:text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded-md border border-white/5 shrink-0 whitespace-nowrap">2020–2024</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* EXPERIENCE - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-5 relative overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 rounded-full blur-[80px] sm:blur-[120px] -z-10 group-hover:bg-blue-500/10 transition-colors duration-700"></div>
-
-          <div className="flex items-center gap-3 mb-8 sm:mb-10">
-            <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-              <Activity size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Professional Experience</h3>
-          </div>
-
-          <div className="relative pl-6 sm:pl-8 border-l-2 border-zinc-800/50 flex-1 ml-2 sm:ml-4">
-            <div className="absolute w-3 h-3 sm:w-4 sm:h-4 bg-zinc-950 border-2 border-blue-500 rounded-full -left-[7.5px] sm:-left-[9px] top-1 sm:top-1.5 shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3">
-              <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
-              <span className="text-zinc-400 text-xs sm:text-sm font-mono mt-2 sm:mt-0 bg-white/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/5 shadow-sm inline-block w-fit">Aug 2025 - Jan 2026</span>
-            </div>
-
-            <p className="text-blue-400 font-semibold mb-6 sm:mb-8 text-base sm:text-lg">Data Scientist Trainee</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-              <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
-                  <Database size={32} className="sm:w-10 sm:h-10" />
-                </div>
-                <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div> Data Pipelines</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Built automated Python and R data cleaning pipelines, cutting data preparation time by 30%.</p>
-              </div>
-              <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
-                  <Cpu size={32} className="sm:w-10 sm:h-10" />
-                </div>
-                <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div> ML Architecture</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Designed and deployed cloud ML pipelines across AWS (S3, SageMaker) and Azure.</p>
-              </div>
-              <div className="bg-zinc-900/40 border border-white/5 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:bg-zinc-800/60 hover:border-white/10 transition-all group/item shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/item:opacity-20 transition-opacity">
-                  <Terminal size={32} className="sm:w-10 sm:h-10" />
-                </div>
-                <h5 className="text-zinc-200 font-semibold mb-2 sm:mb-3 flex items-center gap-2"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div> Model Deployment</h5>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed group-hover/item:text-zinc-300 transition-colors relative z-10">Deployed Random Forest and CNN models behind Flask APIs for production workloads.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* PROJECTS - 12 cols */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-6 relative overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 mb-8 sm:mb-10">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <Bot size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Machine Learning Models & Projects</h3>
-            </div>
-            <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="text-xs sm:text-sm font-medium text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors bg-white/5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/5 w-fit">
-              View All Repos <ExternalLink size={14} className="sm:w-[14px] sm:h-[14px] w-3 h-3" />
-            </a>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center py-16 sm:py-20">
-              <div className="w-8 h-8 border-2 border-zinc-700 border-t-white rounded-full animate-spin"></div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {projects.slice(0, 6).map((proj) => (
-                <a
-                  key={proj.id}
-                  href={proj.html_url !== '#' ? proj.html_url : undefined}
-                  target={proj.html_url !== '#' ? "_blank" : undefined}
-                  className="group/card flex flex-col bg-zinc-900/40 rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-white/5 hover:border-indigo-500/30 hover:bg-zinc-800/60 hover:-translate-y-1 transition-all duration-500 shadow-inner hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden h-full"
-                >
-                  <div className="absolute -top-10 -right-10 w-24 sm:w-32 h-24 sm:h-32 bg-white/5 rounded-full blur-[30px] sm:blur-[40px] -z-10 group-hover/card:bg-blue-500/20 transition-colors duration-500"></div>
-
-                  <div className="flex justify-between items-start mb-4 sm:mb-5">
-                    <div className="p-2 sm:p-2.5 bg-zinc-950 rounded-lg sm:rounded-xl text-zinc-400 group-hover/card:text-white transition-colors border border-white/5 shadow-inner">
-                      <Code2 size={16} className="sm:w-[18px] sm:h-[18px]" />
+              {/* Stage selector tabs */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {pipelineSteps.map((step, idx) => (
+                  <button
+                    key={step.num}
+                    type="button"
+                    onClick={() => setActivePipelineStep(idx)}
+                    className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${
+                      activePipelineStep === idx
+                        ? 'border-indigo-500/50 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.15)]'
+                        : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-mono text-indigo-400 font-bold">Stage {step.num}</span>
+                      {activePipelineStep === idx && <span className="w-2 h-2 rounded-full bg-indigo-400" />}
                     </div>
-                    {proj.language && (
-                      <span className="text-[10px] sm:text-[11px] font-bold text-zinc-300 bg-zinc-950 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md border border-white/5">
-                        {proj.language}
-                      </span>
-                    )}
-                  </div>
-                  <h4 className="text-[17px] sm:text-[19px] font-bold mb-2 sm:mb-3 text-zinc-100 group-hover/card:text-blue-400 transition-colors line-clamp-1">
-                    {proj.title}
-                  </h4>
-                  <p className="text-zinc-400 text-xs sm:text-[15px] leading-relaxed flex-1 line-clamp-3 font-light group-hover/card:text-zinc-300 transition-colors">
-                    {proj.description}
-                  </p>
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* CONTRIBUTIONS - 6 cols */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-6 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-6 flex flex-col justify-center items-center overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full mb-6 sm:mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300 w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
+                    <div className="text-sm font-bold text-white line-clamp-1">{step.title}</div>
+                    <div className="text-xs text-zinc-400 font-mono mt-1">{step.latency}</div>
+                  </button>
+                ))}
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">GitHub Activity</h3>
+
+              {/* Active Stage Details */}
+              <div className="p-4 sm:p-5 rounded-xl bg-zinc-900/60 border border-white/5 flex flex-col gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-xs font-mono text-indigo-300 font-semibold">
+                    Toolchain: {pipelineSteps[activePipelineStep].model}
+                  </span>
+                  <span className="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                    Verified in Production
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                  {pipelineSteps[activePipelineStep].details}
+                </p>
+              </div>
             </div>
-            <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5 text-[11px] font-medium self-start sm:self-auto">
-              <button
-                type="button"
-                onClick={() => setCalendarRange('6months')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  calendarRange === '6months'
-                    ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Last 6 Months
-              </button>
-              <button
-                type="button"
-                onClick={() => setCalendarRange('year')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  calendarRange === 'year'
-                    ? 'bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Full Year
-              </button>
+          </div>
+        </section>
+
+        {/* CORE TECHNICAL COMPETENCIES */}
+        <section id="skills" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-4 flex flex-col gap-8">
+          <div className="flex items-center gap-3 border-b border-white/10 pb-6">
+            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
+              <Cpu size={20} className="text-blue-400" />
+            </div>
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Technical Stack & Toolkit</h3>
+              <p className="text-xs sm:text-sm text-zinc-400">Foundational frameworks, languages, and distributed systems</p>
             </div>
           </div>
 
-          <div
-            ref={calendarScrollRef}
-            className={`w-full overflow-x-auto no-scrollbar pb-2 flex ${calendarRange === '6months' ? 'justify-start sm:justify-center' : 'justify-start'}`}
-          >
-            <div className={`${calendarRange === '6months' ? 'min-w-fit' : 'min-w-[700px] lg:min-w-full'} pr-4 sm:pr-0`}>
-              <GitHubCalendar
-                username="Abhi20O1"
-                colorScheme="dark"
-                transformData={calendarRange === '6months' ? selectLastHalfYear : undefined}
-                labels={
-                  calendarRange === '6months'
-                    ? { totalCount: '{{count}} contributions in the last 6 months' }
-                    : undefined
-                }
-                theme={{
-                  dark: ['rgba(255,255,255,0.02)', 'rgba(59,130,246,0.3)', 'rgba(59,130,246,0.5)', 'rgba(59,130,246,0.8)', 'rgba(59,130,246,1)'],
-                }}
-                style={{ color: '#a1a1aa' }}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="p-5 rounded-2xl bg-zinc-900/50 border border-white/5 flex flex-col gap-3">
+              <span className="text-xs font-mono text-indigo-400 font-bold uppercase tracking-wider">
+                {"// Deep Learning & LLMs"}
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {['PyTorch', 'Transformers', 'vLLM', 'FlashAttention', 'LoRA / PEFT', 'Hugging Face', 'Scikit-learn'].map((s) => (
+                  <span key={s} className="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-zinc-900/50 border border-white/5 flex flex-col gap-3">
+              <span className="text-xs font-mono text-blue-400 font-bold uppercase tracking-wider">
+                {"// Multimodal & Document AI"}
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {['ColBERT', 'BGE-M3', 'PaddleOCR', 'Nougat', 'OpenCV', 'YOLO', 'LangChain', 'LlamaIndex'].map((s) => (
+                  <span key={s} className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-mono">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-zinc-900/50 border border-white/5 flex flex-col gap-3">
+              <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
+                {"// Databases & Vector Stores"}
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {['Milvus', 'Qdrant', 'FAISS', 'PostgreSQL', 'pgvector', 'Redis', 'SQL'].map((s) => (
+                  <span key={s} className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-zinc-900/50 border border-white/5 flex flex-col gap-3">
+              <span className="text-xs font-mono text-purple-400 font-bold uppercase tracking-wider">
+                {"// Systems & Cloud Infra"}
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {['Python', 'C++', 'FastAPI', 'Docker', 'Kubernetes', 'AWS (S3, SageMaker)', 'Linux', 'Git'].map((s) => (
+                  <span key={s} className="px-2.5 py-1 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono">
+                    {s}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ALGORITHMIC PROBLEM SOLVING (LEETCODE & HACKERRANK) - 6 cols */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-6 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-10 group animate-fade-in-up stagger-6 flex flex-col justify-center items-center">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full mb-6 sm:mb-8">
+        {/* ALGORITHMIC PROBLEM SOLVING: HACKERRANK FIRST + LEETCODE */}
+        <section id="problem-solving" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-5 flex flex-col gap-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300 w-4 h-4 sm:w-5 sm:h-5"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
+                <Code2 size={20} className="text-emerald-400" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-zinc-100 tracking-tight">Algorithmic Problem Solving</h3>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Algorithmic Mastery</h3>
+                <p className="text-xs sm:text-sm text-zinc-400">Verified problem solving in complex relational queries and algorithms</p>
+              </div>
             </div>
-            <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5 text-[11px] font-medium self-start sm:self-auto">
+
+            {/* Platform Switcher Buttons */}
+            <div className="flex items-center bg-zinc-950 p-1 rounded-xl border border-white/10 text-xs font-medium self-start sm:self-auto">
               <button
                 type="button"
                 onClick={() => setAlgoPlatform('hackerrank')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                   algoPlatform === 'hackerrank'
-                    ? 'bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30 shadow-sm'
+                    ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -545,9 +627,9 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setAlgoPlatform('leetcode')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                   algoPlatform === 'leetcode'
-                    ? 'bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30 shadow-sm'
+                    ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -557,165 +639,381 @@ export default function App() {
           </div>
 
           {algoPlatform === 'hackerrank' ? (
-            <a
-              href="https://www.hackerrank.com/profile/abhi28031"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full flex justify-center group/img relative"
-            >
-              <div className="relative w-full max-w-[500px]">
-                <div className="absolute inset-0 bg-emerald-500/20 blur-[20px] sm:blur-[30px] rounded-xl sm:rounded-2xl -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
-                <div className="w-full rounded-xl sm:rounded-2xl p-6 bg-zinc-950/80 border border-white/10 group-hover/img:border-emerald-500/40 shadow-2xl transition-all duration-300 flex flex-col justify-between min-h-[220px]">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-inner">
-                        <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg>
-                      </div>
-                      <div>
-                        <h4 className="text-white font-bold text-base flex items-center gap-1.5">
-                          HackerRank
-                        </h4>
-                        <p className="text-xs text-zinc-400 font-mono">@abhi28031</p>
-                      </div>
-                    </div>
-                    <span className="text-xs text-emerald-400 font-medium flex items-center gap-1 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                      Verified <ExternalLink size={12} />
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 my-4">
-                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-semibold text-zinc-200">SQL</span>
-                        <span className="text-xs font-bold text-amber-400">★ ★ ★</span>
-                      </div>
-                      <p className="text-[11px] text-zinc-400">24 Challenges Solved · Gold / Silver</p>
-                    </div>
-                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-semibold text-zinc-200">C++</span>
-                        <span className="text-xs font-bold text-amber-400">★</span>
-                      </div>
-                      <p className="text-[11px] text-zinc-400">Language Proficiency Verified</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* SQL 3-Star Badge Card */}
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 flex flex-col justify-between gap-4 shadow-xl">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-emerald-400 font-semibold uppercase">Relational SQL Domain</span>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3].map((starIdx) => (
+                        <Star key={starIdx} size={16} className="text-amber-400 fill-amber-400" />
+                      ))}
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-zinc-400">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Active Competitor
-                    </span>
-                    <span className="text-emerald-400 group-hover/img:translate-x-0.5 transition-transform font-medium">View Badges & Challenges →</span>
-                  </div>
+                  <h4 className="text-xl font-bold text-white mt-2">SQL 3-Star Gold Badge</h4>
+                  <p className="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
+                    Solved 24 multi-table challenges covering window functions (ROW_NUMBER, DENSE_RANK, LEAD/LAG), recursive CTEs, and aggregated joins on massive schemas.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400">
+                  <span className="font-mono text-white">24 of 24 challenges solved</span>
+                  <a
+                    href="https://www.hackerrank.com/profile/abhi28031"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-emerald-400 hover:underline flex items-center gap-1 font-medium"
+                  >
+                    <span>Verify Profile</span>
+                    <ExternalLink size={12} />
+                  </a>
                 </div>
               </div>
-            </a>
+
+              {/* C++ 1-Star Badge Card */}
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 flex flex-col justify-between gap-4 shadow-xl">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-blue-400 font-semibold uppercase">Systems Language Domain</span>
+                    <div className="flex items-center gap-1">
+                      <Star size={16} className="text-amber-400 fill-amber-400" />
+                      <Star size={16} className="text-zinc-700" />
+                      <Star size={16} className="text-zinc-700" />
+                    </div>
+                  </div>
+                  <h4 className="text-xl font-bold text-white mt-2">C++ 1-Star Badge</h4>
+                  <p className="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
+                    Systems programming: pointer arithmetic, manual memory allocation, low-level data structures, and computational algorithmic complexity.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400">
+                  <span className="font-mono text-white">Language proficiency verified</span>
+                  <a
+                    href="https://www.hackerrank.com/profile/abhi28031"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-emerald-400 hover:underline flex items-center gap-1 font-medium"
+                  >
+                    <span>HackerRank Handle @abhi28031</span>
+                    <ExternalLink size={12} />
+                  </a>
+                </div>
+              </div>
+            </div>
           ) : (
-            <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="w-full flex justify-center group/img relative">
-              <div className="relative w-full max-w-[500px]">
-                <div className="absolute inset-0 bg-orange-500/20 blur-[20px] sm:blur-[30px] rounded-xl sm:rounded-2xl -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500"></div>
+            <div className="flex justify-center">
+              <a
+                href="https://leetcode.com/u/abhi28031/"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full max-w-xl group/leet relative block"
+              >
+                <div className="absolute -inset-1 bg-amber-500/20 rounded-2xl blur-lg opacity-0 group-hover/leet:opacity-100 transition-opacity duration-500 -z-10" />
                 <img
                   src="https://leetcard.jacoblin.cool/abhi28031?theme=dark&font=Geist&ext=activity"
-                  alt="LeetCode Stats"
-                  className="w-full rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 group-hover/img:border-white/30 transition-all duration-300"
+                  alt="LeetCode Stats @abhi28031"
+                  className="w-full rounded-2xl border border-white/10 group-hover/leet:border-amber-500/30 transition-all duration-300 shadow-2xl"
                 />
-              </div>
-            </a>
+              </a>
+            </div>
           )}
-        </div>
+        </section>
 
-        {/* CONTACT FORM - 12 cols */}
-        <div id="contact" className="col-span-1 md:col-span-2 lg:col-span-12 glass-panel rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 lg:p-12 group animate-fade-in-up stagger-6 relative overflow-hidden scroll-mt-24 sm:scroll-mt-32">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -z-10 group-hover:bg-blue-500/20 transition-colors duration-700"></div>
-
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                  <Mail size={18} className="text-zinc-300 sm:w-5 sm:h-5" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Let's Work Together</h3>
+        {/* OPEN SOURCE PROJECTS & GITHUB STREAM */}
+        <section id="projects" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-5 flex flex-col gap-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
+                <Terminal size={20} className="text-purple-400" />
               </div>
-              <p className="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-md">
-                Open to full-time roles and contract projects. If you need a data scientist to build and ship practical ML systems, let's talk.
-              </p>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Featured Projects</h3>
+                <p className="text-xs sm:text-sm text-zinc-400">Open source machine learning architectures and repositories</p>
+              </div>
+            </div>
+            <a
+              href="https://github.com/Abhi20O1"
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs font-semibold text-zinc-300 hover:text-white flex items-center gap-1.5 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10 transition-colors w-fit"
+            >
+              <span>View GitHub @Abhi20O1</span>
+              <ArrowUpRight size={13} />
+            </a>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center py-16">
+              <div className="w-8 h-8 border-2 border-zinc-700 border-t-white rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {projects.map((proj) => (
+                <a
+                  key={proj.id}
+                  href={proj.html_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group/card flex flex-col bg-zinc-950/60 rounded-2xl p-6 border border-white/10 hover:border-indigo-500/40 hover:bg-zinc-900/60 transition-all duration-300 shadow-lg relative overflow-hidden"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-xs font-mono font-semibold text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-md border border-indigo-500/20">
+                      {proj.language || 'Python'}
+                    </span>
+                    <div className="flex items-center gap-1 text-xs text-zinc-400 font-mono">
+                      <Star size={13} className="text-amber-400 fill-amber-400" />
+                      <span>{proj.stars ?? 0}</span>
+                    </div>
+                  </div>
+
+                  <h4 className="text-lg font-bold text-white group-hover/card:text-indigo-400 transition-colors line-clamp-1 mb-2">
+                    {proj.title}
+                  </h4>
+
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed flex-1 line-clamp-3">
+                    {proj.description}
+                  </p>
+
+                  <div className="pt-4 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500 group-hover/card:text-zinc-300 transition-colors">
+                    <span>Inspect Code</span>
+                    <ArrowUpRight size={14} className="text-indigo-400" />
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* GitHub Contribution Calendar (Latest 180 Days) */}
+          <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span className="text-sm font-semibold text-white">Recent Contribution Velocity (Last 6 Months)</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCalendarRange('6months')}
+                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                    calendarRange === '6months' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  6 Months
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCalendarRange('year')}
+                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                    calendarRange === 'year' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  Full Year
+                </button>
+              </div>
             </div>
 
-            <div className="flex-[1.5] w-full">
+            <div
+              ref={calendarScrollRef}
+              className="w-full overflow-x-auto no-scrollbar pb-2"
+            >
+              <div className="min-w-[700px] sm:min-w-fit">
+                <GitHubCalendar
+                  username="Abhi20O1"
+                  colorScheme="dark"
+                  transformData={calendarRange === '6months' ? selectLastHalfYear : undefined}
+                  labels={{
+                    totalCount: '{{count}} contributions in recent cycle'
+                  }}
+                  theme={{
+                    dark: [
+                      'rgba(255,255,255,0.03)',
+                      'rgba(99,102,241,0.25)',
+                      'rgba(99,102,241,0.5)',
+                      'rgba(99,102,241,0.75)',
+                      'rgba(99,102,241,1)'
+                    ]
+                  }}
+                  fontSize={12}
+                  blockSize={11}
+                  blockMargin={3}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* EDUCATION & FOUNDATIONAL RESEARCH */}
+        <section id="education" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-6 flex flex-col gap-8">
+          <div className="flex items-center gap-3 border-b border-white/10 pb-6">
+            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
+              <MapPin size={20} className="text-amber-400" />
+            </div>
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Education & Foundation</h3>
+              <p className="text-xs sm:text-sm text-zinc-400">Formal training in mathematics, statistics, and computer science</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-2xl bg-zinc-950/70 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-indigo-400 font-bold">8.41 CPI / 10.0</span>
+                  <span className="text-zinc-500">2021 - 2024</span>
+                </div>
+                <h4 className="text-lg font-bold text-white mt-2">Indian Institute of Technology (IIT) Guwahati</h4>
+                <p className="text-sm text-indigo-300 font-medium mt-0.5">Minor in Data Science & Artificial Intelligence</p>
+                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
+                  Focus: Advanced Machine Learning, Deep Neural Networks, Linear Algebra, Convex Optimization, and Probability Theory.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-white/10 flex items-center gap-2 text-xs text-zinc-400">
+                <CheckCircle2 size={14} className="text-emerald-400" />
+                <span>Verified Academic Credentials</span>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-zinc-950/70 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-blue-400 font-bold">8.16 CGPA / 10.0</span>
+                  <span className="text-zinc-500">2020 - 2024</span>
+                </div>
+                <h4 className="text-lg font-bold text-white mt-2">JSS Academy of Technical Education, Noida</h4>
+                <p className="text-sm text-blue-300 font-medium mt-0.5">B.Tech in Computer Science & Engineering</p>
+                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
+                  Focus: Data Structures & Algorithms, Distributed Systems, Operating Systems, Database Management Systems, and Networks.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-white/10 flex items-center gap-2 text-xs text-zinc-400">
+                <CheckCircle2 size={14} className="text-emerald-400" />
+                <span>Verified Academic Credentials</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* INTERACTIVE CONTACT & COMMUNICATION */}
+        <section id="contact" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-6 scroll-mt-24">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
+            <div className="flex-1 flex flex-col justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-indigo-400 font-bold uppercase tracking-wider mb-2">
+                  <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+                  <span>Direct Communication</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Let's Build Together</h3>
+                <p className="text-sm text-zinc-400 mt-2 leading-relaxed max-w-md">
+                  I'm actively open to full-time AI Engineering, Data Science, and Machine Learning systems roles. Whether you have an open role or a challenging problem, let's connect.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3 text-xs text-zinc-400 font-mono">
+                <div className="flex items-center gap-2">
+                  <Mail size={14} className="text-indigo-400" />
+                  <span>as2001abhi@gmail.com</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageCircle size={14} className="text-emerald-400" />
+                  <span>+91 9315570085 (WhatsApp Available)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-amber-400" />
+                  <span>New Delhi, India (Open to Relocation & Remote)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-[1.4] w-full bg-zinc-950/70 p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl">
               <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                 {formError && (
-                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2.5 rounded-xl text-sm font-medium animate-fade-in-up">
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2.5 rounded-xl text-xs font-medium">
                     {formError}
                   </div>
                 )}
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
-                    <label htmlFor="name" className="sr-only">Name</label>
+                    <label htmlFor="name" className="text-xs text-zinc-400 font-medium mb-1 block">Your Name</label>
                     <input
                       type="text"
                       id="name"
                       value={contactName}
                       onChange={(e) => { setContactName(e.target.value); if (formError) setFormError(""); }}
-                      placeholder="Your name"
-                      className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner ${formError === "Please enter your name!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-indigo-500/50 focus:ring-indigo-500/50"}`}
+                      placeholder="e.g. Alex Rivera"
+                      className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 transition-colors shadow-inner"
                     />
                   </div>
                   <div className="flex-1">
-                    <label htmlFor="email" className="sr-only">Email</label>
+                    <label htmlFor="email" className="text-xs text-zinc-400 font-medium mb-1 block">Your Email</label>
                     <input
                       type="email"
                       id="email"
                       value={contactEmail}
                       onChange={(e) => { setContactEmail(e.target.value); if (formError) setFormError(""); }}
-                      placeholder="Your email"
-                      className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner ${formError === "Please enter your email!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-indigo-500/50 focus:ring-indigo-500/50"}`}
+                      placeholder="e.g. alex@company.com"
+                      className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 transition-colors shadow-inner"
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="message" className="sr-only">Message</label>
+                  <label htmlFor="message" className="text-xs text-zinc-400 font-medium mb-1 block">Message</label>
                   <textarea
                     id="message"
                     rows={4}
                     value={contactMessage}
                     onChange={(e) => { setContactMessage(e.target.value); if (formError) setFormError(""); }}
-                    placeholder="What would you like to discuss?"
-                    className={`w-full bg-zinc-950/50 border rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 transition-all shadow-inner resize-none ${formError === "Please enter a message!" ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50" : "border-white/10 focus:border-indigo-500/50 focus:ring-indigo-500/50"}`}
+                    placeholder="Tell me about the role, project, or machine learning problem..."
+                    className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 transition-colors shadow-inner resize-none"
                     required
-                  ></textarea>
+                  />
                 </div>
-                <div className="mt-2 w-full flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
+                <div className="mt-2 flex flex-col sm:flex-row items-center justify-end gap-3">
                   <button
                     type="button"
                     onClick={handleWhatsAppSubmit}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 px-6 py-3.5 rounded-xl font-bold text-sm transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-5 py-3 rounded-xl font-bold text-xs transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)] cursor-pointer"
                   >
-                    WhatsApp <MessageCircle size={16} />
+                    <MessageCircle size={15} />
+                    <span>Send via WhatsApp</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleEmailSubmit}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-zinc-950 hover:bg-zinc-200 px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-zinc-950 hover:bg-zinc-200 px-6 py-3 rounded-xl font-bold text-xs transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer"
                   >
-                    Send Email <Send size={16} />
+                    <Send size={15} />
+                    <span>Send via Email</span>
                   </button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
+        </section>
 
       </main>
 
-      {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2 mt-6 sm:mt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-3 animate-fade-in-up text-center sm:text-left relative">
-        <div className="flex flex-col gap-2 items-center sm:items-start">
-          <p className="text-zinc-500 text-xs sm:text-sm font-medium">Abhishek Singh · Data Science, Machine Learning & Computer Vision</p>
+      {/* FOOTER */}
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 mt-12 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 rounded-full overflow-hidden border border-white/10">
+            <img src={`${import.meta.env.BASE_URL}Logo.webp`} alt="Logo" className="w-full h-full object-cover" />
+          </div>
+          <span className="font-medium text-zinc-300">Abhishek Singh · AI & Data Science Engineer</span>
         </div>
-        <div className="flex gap-3 sm:gap-4">
-          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" title="GitHub" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg></a>
-          <a href="https://www.hackerrank.com/profile/abhi28031" target="_blank" rel="noreferrer" title="HackerRank" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M0 0v24h24V0zm9.95 8.002h1.805c.061 0 .111.05.111.111v7.767c0 .061-.05.111-.11.111H9.95c-.061 0-.111-.05-.111-.11v-2.87H7.894v2.87c0 .06-.05.11-.11.11H5.976a.11.11 0 01-.11-.11V8.112c0-.06.05-.11.11-.11h1.806c.061 0 .11.05.11.11v2.869H9.84v-2.87c0-.06.05-.11.11-.11zm2.999 0h5.778c.061 0 .111.05.111.11v7.767a.11.11 0 01-.11.112h-5.78a.11.11 0 01-.11-.11V8.111c0-.06.05-.11.11-.11z"/></svg></a>
-          <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" title="LinkedIn" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg></a>
-          <a href="mailto:abhi28031@gmail.com" title="Email" className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><Mail className="w-4 h-4 sm:w-5 sm:h-5" /></a>
+
+        <div className="flex items-center gap-5">
+          <a href="https://github.com/Abhi20O1" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/abhishek-singh-sd" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+            LinkedIn
+          </a>
+          <a href="https://www.hackerrank.com/profile/abhi28031" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+            HackerRank
+          </a>
+          <a href="https://leetcode.com/u/abhi28031/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+            LeetCode
+          </a>
+          <a href={`mailto:${email}`} className="hover:text-white transition-colors">
+            Email
+          </a>
         </div>
       </footer>
     </div>
