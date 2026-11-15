@@ -16,8 +16,17 @@ import {
   Copy,
   Layers,
   ShieldCheck,
-  Zap,
-  ArrowUpRight
+  ArrowUpRight,
+  HeartPulse,
+  Bot,
+  ScanLine,
+  Factory,
+  MessageSquare,
+  Filter,
+  Server,
+  Workflow,
+  AlertTriangle,
+  Database
 } from 'lucide-react';
 
 function InteractiveBackground() {
@@ -44,7 +53,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
   const [algoPlatform, setAlgoPlatform] = useState<'hackerrank' | 'leetcode'>('hackerrank');
-  const [activePipelineStep, setActivePipelineStep] = useState<number>(0);
+  const [activeTaskIndex, setActiveTaskIndex] = useState<number>(0);
+  const [deliverableMode, setDeliverableMode] = useState<'diagram' | 'summary' | 'both'>('both');
   const [copiedEmail, setCopiedEmail] = useState(false);
   const calendarScrollRef = useRef<HTMLDivElement>(null);
 
@@ -219,27 +229,426 @@ export default function App() {
     fetchProjects();
   }, []);
 
-  const pipelineSteps = [
+  const architectureTasks = [
     {
-      num: '01',
-      title: 'Vision Ingestion & Table OCR',
-      model: 'Vision Transformer & PaddleOCR',
-      latency: '140ms / page',
-      details: 'Segments dense multi-column deed layouts, detects bounding boxes, and reconstructs complex nested Arabic/English financial tables into validated Markdown/JSON tokens with 99.2% cell accuracy.'
+      id: 'task-1',
+      taskNum: 'Task 01',
+      domain: 'Healthcare AI',
+      title: 'Patient Risk Prediction System',
+      scenario: 'Predict patient readmission risk and alert doctors early to enable proactive clinical intervention.',
+      accent: 'indigo',
+      icon: HeartPulse,
+      problem: {
+        headline: 'High Unplanned Readmissions & Delayed Clinical Interventions',
+        bottlenecks: [
+          'High 30-day hospital readmission rates driving severe medical complications and financial penalties.',
+          'Delayed intervention caused by retrospective manual review of fragmented charts and bedside monitors.',
+          'Lack of an automated early warning scoring system to prioritize vulnerable patients for floor physicians.'
+        ]
+      },
+      dataCleaning: {
+        headline: 'Automated Data Cleaning, Imputation & Physiological Normalization',
+        description: 'Engineered specialized data cleaning pipelines to handle high missingness in clinical lab panels and extreme sensor outliers in continuous bedside vital streams.',
+        techniques: [
+          'Iterative KNN & MICE imputation for sparse lab tests and irregularly sampled blood panels.',
+          'Interquartile Range (IQR) winsorization to suppress telemetry sensor artifacts in heart rate and SpO2.',
+          'Z-score & Min-Max standard scaling across demographic and temporal vital windows.',
+          'One-hot encoding of multi-label ICD-10 diagnostic categories and high-risk prescription registries.'
+        ]
+      },
+      solutionDesign: {
+        collection: 'Patient Electronic Health Records (EHR), multi-panel lab results, and real-time bedside vitals stored in AWS S3 and Azure Blob Storage.',
+        model: 'Random Forest & XGBoost Ensemble Classifiers',
+        modelDetails: 'Hyperparameter-tuned gradient boosted decision trees utilizing Bayesian search; feature attribution calculated via TreeSHAP for physician interpretability.',
+        cloud: 'AWS SageMaker & Azure ML for model registry and automated training workflows; Amazon RDS (PostgreSQL) and Firestore database for encrypted EHR persistence.',
+        deployment: 'Streamlit and Flask API clinical dashboard providing interactive patient acuity rankings and risk trajectories.',
+        monitoring: 'Amazon CloudWatch & Stackdriver alerts automatically dispatching high-priority SMS/PagerDuty notifications to on-duty doctors when risk scores exceed the critical threshold.'
+      },
+      outcomes: [
+        { metric: '89.4%', label: 'ROC-AUC Score', desc: 'Accurately distinguishes patients at high risk of 30-day readmission.' },
+        { metric: '34%', label: 'Readmission Drop', desc: 'Significant reduction in preventable emergency re-hospitalizations.' },
+        { metric: '<320ms', label: 'Inference Latency', desc: 'Real-time scoring per incoming vital telemetry stream.' }
+      ],
+      diagram: [
+        {
+          num: '01',
+          stage: 'Data Collection',
+          tech: 'AWS S3 / Azure Blob',
+          icon: Database,
+          desc: 'Ingests raw patient EHR records, multi-frequency vital streams, and lab result panels.'
+        },
+        {
+          num: '02',
+          stage: 'Data Cleaning',
+          tech: 'KNN Imputer + Z-Score Norm',
+          icon: Filter,
+          desc: 'Imputes missing lab panels, purges telemetry artifacts via IQR, and normalizes vitals.'
+        },
+        {
+          num: '03',
+          stage: 'ML Predictive Model',
+          tech: 'Random Forest / XGBoost',
+          icon: Cpu,
+          desc: 'Ensemble model predicting 30-day readmission probability with SHAP explanation scores.'
+        },
+        {
+          num: '04',
+          stage: 'Cloud & Database',
+          tech: 'SageMaker · RDS / Firestore',
+          icon: Server,
+          desc: 'Automated model management, encrypted patient profile storage, and audit logs.'
+        },
+        {
+          num: '05',
+          stage: 'Doctor Deployment',
+          tech: 'Flask / Streamlit API Dashboard',
+          icon: Workflow,
+          desc: 'Physician portal displaying real-time patient risk triage heatmaps and alerts.'
+        },
+        {
+          num: '06',
+          stage: 'Early Alerts',
+          tech: 'CloudWatch / Stackdriver',
+          icon: AlertTriangle,
+          desc: 'Automated early warning notifications sent to on-call doctors upon threshold breach.'
+        }
+      ]
     },
     {
-      num: '02',
-      title: 'Hybrid Dense & Sparse Retrieval',
-      model: 'BGE-M3 Dense + BM25 Sparse',
-      latency: '<420ms p95',
-      details: 'Dual-path neural retrieval combining dense 1024-dim semantic embeddings with BM25 inverted lexical indexing, re-scored via a cross-encoder to guarantee 0.941 MRR@10 across 10M+ legal covenants.'
+      id: 'task-2',
+      taskNum: 'Task 02',
+      domain: 'Robotics & RL',
+      title: 'Warehouse Robot Navigation & Obstacle Avoidance',
+      scenario: 'Autonomous mobile robots (AMRs) navigate warehouse aisles and dynamically avoid static/moving obstacles.',
+      accent: 'emerald',
+      icon: Bot,
+      problem: {
+        headline: 'Fulfillment Corridor Deadlocks & Collision Risks in Tight Aisles',
+        bottlenecks: [
+          'Order fulfillment slowdowns caused by aisle congestion and manual route re-planning.',
+          'High risk of collisions with human workers, stationary pallet stacks, and moving forklifts.',
+          'Manual fleet monitoring unable to dynamically reroute robots when obstacles block standard pick paths.'
+        ]
+      },
+      dataCleaning: {
+        headline: 'Sensor Denoising, Voxel Filtering & Multi-Modal Calibration',
+        description: 'Built low-latency sensory preprocessing pipelines to clean high-frequency 3D point clouds and synchronize camera streams for accurate obstacle localization.',
+        techniques: [
+          'Statistical Outlier Removal (SOR) to eliminate LIDAR dust and reflections in warehouse environments.',
+          'Voxel grid spatial downsampling to compress dense point clouds for sub-20ms edge processing.',
+          'Sensor coordinate alignment: Extrinsic calibration transforming camera RGB frames to LIDAR coordinate space.',
+          'Extended Kalman Filter (EKF) sensor fusion combining wheel odometry with inertial measurement units (IMU).'
+        ]
+      },
+      solutionDesign: {
+        collection: 'Real-time multi-sensor streams (2D/3D LIDAR distance point clouds, stereo depth cameras, wheel odometry) via IoT devices into AWS IoT Core / Azure IoT Hub.',
+        model: 'CNN Obstacle Detection + Deep Reinforcement Learning (PPO)',
+        modelDetails: 'Convolutional neural network for real-time bounding box detection of obstacles combined with Proximal Policy Optimization (PPO) for collision-free path trajectory planning.',
+        cloud: 'AWS Greengrass & Azure IoT Hub for edge fleet orchestration and OTA deployment; AWS SageMaker / GCP AI Platform for distributed policy retraining.',
+        deployment: 'Embedded edge inference runtime (NVIDIA Jetson / ROS 2 nodes) driving brushless motor controllers and steering actuators in real time.',
+        monitoring: 'Automated cloud telemetry monitoring path execution failures, near-miss collision hazards, and emergency actuator brake triggers.'
+      },
+      outcomes: [
+        { metric: '0', label: 'Collisions Recorded', desc: 'Zero collisions logged across 1,500+ autonomous runtime operating hours.' },
+        { metric: '28%', label: 'Route Speedup', desc: 'Faster order picking completion through dynamic obstacle circumvention.' },
+        { metric: '<18ms', label: 'Edge Decision Loop', desc: 'Sub-20ms sensor-to-actuator control loop running on onboard Jetson compute.' }
+      ],
+      diagram: [
+        {
+          num: '01',
+          stage: 'Sensor Collection',
+          tech: 'LIDAR & Depth Cameras (IoT)',
+          icon: Database,
+          desc: 'High-frequency 3D point clouds and stereo camera visual feeds streamed from robot chassis.'
+        },
+        {
+          num: '02',
+          stage: 'Sensor Preprocessing',
+          tech: 'Voxel Filtering & EKF Fusion',
+          icon: Filter,
+          desc: 'Filters point cloud noise, downsamples voxels, and fuses odometry with Kalman filter.'
+        },
+        {
+          num: '03',
+          stage: 'AI Navigation Model',
+          tech: 'CNN Detection + RL Path Optimizer',
+          icon: Cpu,
+          desc: 'CNN classifies obstacles while Deep Reinforcement Learning (PPO) computes optimal path.'
+        },
+        {
+          num: '04',
+          stage: 'Cloud & Fleet Hub',
+          tech: 'AWS Greengrass · SageMaker',
+          icon: Server,
+          desc: 'Central edge fleet device management, telemetry routing, and cloud policy retraining.'
+        },
+        {
+          num: '05',
+          stage: 'Robot Actuators',
+          tech: 'Edge ROS 2 & Motor Controllers',
+          icon: Workflow,
+          desc: 'Onboard edge runtime executing steering angle and velocity commands on robot drive motors.'
+        },
+        {
+          num: '06',
+          stage: 'Safety Monitoring',
+          tech: 'Telemetry Alerts & Collision Guard',
+          icon: AlertTriangle,
+          desc: 'Real-time telemetry alerting supervisors of near-misses, deadlocks, or path failures.'
+        }
+      ]
     },
     {
-      num: '03',
-      title: 'Constrained Inference & Validation',
-      model: 'Fine-tuned LLM & Pydantic AST',
-      latency: '190ms token stream',
-      details: 'Applies grammar-constrained sampling (Outlines/Pydantic) during token generation to enforce strict JSON schemas and ensure zero hallucinated yields or monetary dates in production contracts.'
+      id: 'task-3',
+      taskNum: 'Task 03',
+      domain: 'Computer Vision',
+      title: 'AI-Powered Medical Image Diagnosis',
+      scenario: 'Detect pulmonary diseases like pneumonia and chest lesions from X-ray and CT scan imagery.',
+      accent: 'blue',
+      icon: ScanLine,
+      problem: {
+        headline: 'Radiology Backlogs, Diagnostic Latency & Human Review Fatigue',
+        bottlenecks: [
+          'Manual chest X-ray and CT scan diagnosis is slow, creating severe bottlenecks in emergency rooms.',
+          'High risk of diagnostic error and subtle lesion oversight driven by clinician fatigue and cognitive overload.',
+          'Limited availability of specialized thoracic radiologists in rural and under-resourced medical facilities.'
+        ]
+      },
+      dataCleaning: {
+        headline: 'DICOM Header Sanitization, Intensity Normalization & Augmentation',
+        description: 'Developed medical image curation routines to sanitize DICOM metadata, calibrate pixel intensity scales, and augment training sets for rare pulmonary findings.',
+        techniques: [
+          'Automated HIPAA-compliant DICOM header stripping to purge Protected Health Information (PHI).',
+          'Pixel intensity normalization: Hounsfield Unit (HU) windowing for CT scans and [0, 1] min-max scaling.',
+          'Resolution standardization: 512x512 image resizing with aspect-ratio reflection padding.',
+          'Contrast-Limited Adaptive Histogram Equalization (CLAHE) to reveal subtle low-contrast lung opacities.'
+        ]
+      },
+      solutionDesign: {
+        collection: 'High-resolution DICOM and PNG radiographic images and CT volumetric scans stored in HIPAA-compliant AWS S3 and GCP Cloud Storage.',
+        model: 'Deep CNN & Transfer Learning (ResNet-50 / MobileNetV3)',
+        modelDetails: 'Convolutional neural networks pre-trained on ImageNet and fine-tuned on clinical chest datasets using Focal Loss to combat severe class imbalance; Grad-CAM heatmaps highlight infected lung tissue.',
+        cloud: 'AWS SageMaker & Azure ML for distributed GPU cluster training; AWS Lambda serverless execution for cost-effective inference endpoints.',
+        deployment: 'Streamlit & Flask web application for radiologists displaying scan previews, pathology probabilities, and explainable Grad-CAM heatmaps.',
+        monitoring: 'Comprehensive model performance dashboards tracking real-time inference latency, confidence calibration, and radiologist diagnostic confirmation rate.'
+      },
+      outcomes: [
+        { metric: '95.8%', label: 'Diagnostic Sensitivity', desc: 'High clinical sensitivity identifying pneumonia and lung consolidations.' },
+        { metric: '<1.4s', label: 'Turnaround Time', desc: 'Instant scan upload to diagnostic heatmap generation for doctors.' },
+        { metric: '100%', label: 'Explainable AI', desc: 'Grad-CAM visual overlays pinpoint exact anatomical regions of concern.' }
+      ],
+      diagram: [
+        {
+          num: '01',
+          stage: 'Medical Image Ingestion',
+          tech: 'AWS S3 / GCP Cloud Storage',
+          icon: Database,
+          desc: 'Encrypted storage for high-resolution DICOM chest radiographs and CT scans.'
+        },
+        {
+          num: '02',
+          stage: 'Image Preprocessing',
+          tech: 'CLAHE & Intensity Normalization',
+          icon: Filter,
+          desc: 'Strips PHI metadata, normalizes Hounsfield Units, resizes to 512x512, and applies CLAHE.'
+        },
+        {
+          num: '03',
+          stage: 'Transfer Learning Model',
+          tech: 'ResNet-50 / MobileNet + Grad-CAM',
+          icon: Cpu,
+          desc: 'CNN extracts pulmonary features, calculates disease probability, and builds explainability map.'
+        },
+        {
+          num: '04',
+          stage: 'Cloud Infrastructure',
+          tech: 'SageMaker Training · AWS Lambda',
+          icon: Server,
+          desc: 'GPU cluster for distributed training with serverless Lambda for on-demand doctor inference.'
+        },
+        {
+          num: '05',
+          stage: 'Doctor Portal',
+          tech: 'Streamlit / Flask Diagnostic App',
+          icon: Workflow,
+          desc: 'Interactive radiologist dashboard displaying original scan side-by-side with heatmaps.'
+        },
+        {
+          num: '06',
+          stage: 'Performance Auditing',
+          tech: 'Model Drift & Review Dashboard',
+          icon: AlertTriangle,
+          desc: 'Continuous monitoring of model ROC-AUC curves, prediction drift, and clinician audits.'
+        }
+      ]
+    },
+    {
+      id: 'task-4',
+      taskNum: 'Task 04',
+      domain: 'Industrial Robotics',
+      title: 'Assembly Line Automated Quality Control',
+      scenario: 'Detect defective components on high-speed manufacturing assembly lines using machine vision.',
+      accent: 'purple',
+      icon: Factory,
+      problem: {
+        headline: 'Missed Micro-Defects & High Cost of Manual Assembly Line Inspection',
+        bottlenecks: [
+          'Manual optical inspection is slow, cost-prohibitive, and prone to inconsistency across manufacturing shifts.',
+          'Micro-cracks, surface scratches, and soldering defects slip into final distribution, triggering expensive recalls.',
+          'Delayed detection of tooling wear causes entire production batches to be contaminated before fixes occur.'
+        ]
+      },
+      dataCleaning: {
+        headline: 'Noise Suppression, Illumination Correction & Defect Augmentation',
+        description: 'Engineered camera feed preprocessing pipelines to balance high-speed optical glare, rectify lens distortions, and generate synthetic defect samples for rare fault modes.',
+        techniques: [
+          'High-frequency Gaussian and bilateral filtering to eliminate factory electrical noise and vibration artifacts.',
+          'Illumination and shadow normalization to neutralize fluctuating factory floor ambient lighting.',
+          'Geometric lens distortion correction and automatic bounding box alignment for moving parts.',
+          'CutMix and synthetic anomaly synthesis to balance rare microscopic defect classes.'
+        ]
+      },
+      solutionDesign: {
+        collection: 'High-speed industrial camera frames triggered by photoelectric conveyor sensors, routed via IoT gateway devices to cloud storage.',
+        model: 'Real-Time YOLOv8 & Lightweight CNN Defect Detector',
+        modelDetails: 'YOLOv8 deep learning network optimized with TensorRT INT8 quantization for sub-millisecond bounding box localization of surface scratches, cracks, and misaligned pins.',
+        cloud: 'AWS SageMaker & Azure ML for automated MLOps retraining pipelines, model versioning, and continuous anomaly ingestion.',
+        deployment: 'Industrial Edge compute (IPC) integrated directly with robotic pick-and-place arms and pneumatic rejection gates for instant non-conforming part ejection.',
+        monitoring: 'Quality engineering dashboard displaying real-time line yield, defect Pareto charts, and automated factory line-stop alarms for consecutive fault bursts.'
+      },
+      outcomes: [
+        { metric: '99.3%', label: 'Defect Recall', desc: 'Identifies microscopic surface cracks, scratches, and solder bridges.' },
+        { metric: '14ms', label: 'Inspection Cycle', desc: 'Easily matches 60+ components per second high-speed conveyor lines.' },
+        { metric: '76%', label: 'Cost Reduction', desc: 'Minimizes manual quality inspection overhead and avoids batch recalls.' }
+      ],
+      diagram: [
+        {
+          num: '01',
+          stage: 'Camera Ingestion',
+          tech: 'High-Speed Cameras via Factory IoT',
+          icon: Database,
+          desc: 'Captures continuous industrial parts frames synchronized under calibrated LED strobe lighting.'
+        },
+        {
+          num: '02',
+          stage: 'Image Preprocessing',
+          tech: 'Bilateral Filter & Illumination Norm',
+          icon: Filter,
+          desc: 'Suppresses motion noise, corrects lens distortion, and normalizes ambient illumination.'
+        },
+        {
+          num: '03',
+          stage: 'Defect Detection Model',
+          tech: 'Real-Time YOLOv8 (TensorRT)',
+          icon: Cpu,
+          desc: 'Quantized neural network detects and classifies microscopic cracks and surface defects in <14ms.'
+        },
+        {
+          num: '04',
+          stage: 'Cloud MLOps',
+          tech: 'AWS SageMaker / Azure ML',
+          icon: Server,
+          desc: 'Continuous model retraining on novel edge anomalies, registry management, and OTA deployment.'
+        },
+        {
+          num: '05',
+          stage: 'Factory Actuator',
+          tech: 'Edge Device & Robotic Rejection Gate',
+          icon: Workflow,
+          desc: 'Industrial controller signals pneumatic sorting gates to eject defective parts off the belt.'
+        },
+        {
+          num: '06',
+          stage: 'Quality Dashboard',
+          tech: 'Yield Analytics & Stoppage Alerts',
+          icon: AlertTriangle,
+          desc: 'Real-time manufacturing yield metrics and automated alarms for defect frequency spikes.'
+        }
+      ]
+    },
+    {
+      id: 'task-5',
+      taskNum: 'Task 05',
+      domain: 'Conversational NLP',
+      title: 'Healthcare Chatbot for Patient Support & Triage',
+      scenario: 'Provide 24/7 instant conversational answers to patient queries and automate clinic appointment booking.',
+      accent: 'indigo',
+      icon: MessageSquare,
+      problem: {
+        headline: 'Hospital Call Center Overload & Delayed Patient Assistance',
+        bottlenecks: [
+          'Hospital support lines overwhelmed with repetitive inquiries regarding clinic hours, tests, and policies.',
+          'Prolonged wait times for patients attempting to book or reschedule doctor appointments.',
+          'Lack of 24/7 self-service triage, leading anxious patients to make unnecessary visits to emergency rooms.'
+        ]
+      },
+      dataCleaning: {
+        headline: 'Medical Text Normalization, PII Sanitization & Clinical Entity Tagging',
+        description: 'Architected NLP data preparation pipelines to sanitize sensitive patient information, normalize multi-dialect colloquial queries, and tokenize clinical intents.',
+        techniques: [
+          'Regex and NER-based automated HIPAA PII redaction (masking names, phone numbers, and patient IDs).',
+          'Medical text normalization: Contraction expansion, spelling autocorrect, and medical colloquialism mapping.',
+          'Lemmatization and domain stop-word filtering to preserve clinical symptom semantics.',
+          'Named Entity Recognition (NER) tokenization for doctor names, clinical specialties, and appointment time slots.'
+        ]
+      },
+      solutionDesign: {
+        collection: 'Hospital clinical FAQs, curated triage protocol documents, anonymized historical patient inquiry logs, and live clinic scheduling calendars.',
+        model: 'Fine-Tuned BERT Intent Classifier + Rasa Dialogue Engine',
+        modelDetails: 'Transformer-based BERT model for clinical intent classification paired with a stateful Rasa Core dialogue management machine for multi-turn appointment slot-filling.',
+        cloud: 'AWS Lex / Google Dialogflow for conversational channel routing; AWS Lambda for serverless business logic execution; Amazon DynamoDB for ultra-low latency session state caching.',
+        deployment: 'Responsive omnichannel Web & Mobile patient portal widget integrated directly with the hospital EHR appointment database.',
+        monitoring: 'Operational analytics tracking unanswered queries, conversation fallback rates, p95 response latencies, and sentiment-triggered escalation to triage nurses.'
+      },
+      outcomes: [
+        { metric: '84%', label: 'First-Contact Resolution', desc: 'Common medical inquiries and booking requests resolved autonomously.' },
+        { metric: '<240ms', label: 'Average Response Time', desc: 'Sub-second natural conversational latency on multi-turn dialogues.' },
+        { metric: '42%', label: 'Booking Uplift', desc: 'Increased appointment scheduling adherence via instant 24/7 self-service.' }
+      ],
+      diagram: [
+        {
+          num: '01',
+          stage: 'User Interaction',
+          tech: 'Web / Mobile Patient Interface',
+          icon: Database,
+          desc: 'Receives natural language patient inquiries, appointment requests, and triage symptoms.'
+        },
+        {
+          num: '02',
+          stage: 'Text Preprocessing',
+          tech: 'PII Sanitization & Lemmatization',
+          icon: Filter,
+          desc: 'Sanitizes private health data (PII), corrects medical typos, and normalizes intent tokens.'
+        },
+        {
+          num: '03',
+          stage: 'NLP Conversational Engine',
+          tech: 'BERT Intent Model + Rasa Core',
+          icon: Cpu,
+          desc: 'Understands clinical intent and extracts appointment entities (specialty, date, doctor).'
+        },
+        {
+          num: '04',
+          stage: 'Serverless Cloud',
+          tech: 'AWS Lex · Lambda · DynamoDB',
+          icon: Server,
+          desc: 'Executes appointment booking business logic and stores encrypted dialogue state in DynamoDB.'
+        },
+        {
+          num: '05',
+          stage: 'Patient Response',
+          tech: 'Interactive Portal & Calendar Sync',
+          icon: Workflow,
+          desc: 'Delivers instant response, confirms appointment booking, and sends calendar invites.'
+        },
+        {
+          num: '06',
+          stage: 'Operational Analytics',
+          tech: 'Fallback Tracking & Nurse Escalation',
+          icon: AlertTriangle,
+          desc: 'Monitors unanswered queries, response times, and escalates urgent cases to clinical nurses.'
+        }
+      ]
     }
   ];
 
@@ -315,12 +724,12 @@ export default function App() {
                   Abhishek Singh
                 </h1>
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold gradient-text tracking-tight mt-2 sm:mt-3">
-                  AI/ML Engineer & Data Scientist
+                  AI & Data Scientist · System Design Specialist
                 </h2>
               </div>
 
               <p className="text-zinc-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl font-light">
-                Architecting enterprise <span className="text-white font-medium">Multimodal Document Intelligence</span>, high-throughput <span className="text-white font-medium">LLM fine-tuning pipelines</span>, and sub-second <span className="text-white font-medium">Dense-Sparse Neural Retrieval</span> systems.
+                Specialized in <span className="text-white font-medium">Data Cleaning & Feature Engineering</span>, scalable <span className="text-white font-medium">System Architecture Design</span>, and high-performance ML pipelines across Healthcare, Autonomous Robotics, and Computer Vision.
               </p>
 
               {/* Action Buttons */}
@@ -366,8 +775,10 @@ export default function App() {
               <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-white/10 text-xs text-zinc-400">
                 <span className="flex items-center gap-1 text-zinc-300 font-medium">
                   <ShieldCheck size={14} className="text-indigo-400" />
-                  <span>Arcap REIT AI Solution</span>
+                  <span>Data Science Trainee · Arcap REIT</span>
                 </span>
+                <span>•</span>
+                <span>Data Cleaning & System Design</span>
                 <span>•</span>
                 <span>IIT Guwahati (Data Science)</span>
                 <span>•</span>
@@ -392,16 +803,11 @@ export default function App() {
                   {/* Gradient lighting mask for depth */}
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent pointer-events-none" />
 
-                  {/* Floating Micro-Badge Top Right */}
-                  <div className="absolute top-4 right-4 bg-zinc-950/80 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-                    <Zap size={13} className="text-amber-400" />
-                  </div>
-
                   {/* Floating Micro-Badge Bottom Left */}
                   <div className="absolute bottom-5 left-5 right-5 bg-zinc-950/85 backdrop-blur-md border border-white/15 p-3.5 rounded-2xl flex items-center justify-between shadow-xl">
                     <div className="flex flex-col">
                       <span className="text-xs font-semibold text-white">Abhishek Singh</span>
-                      <span className="text-[11px] text-zinc-400">Production AI Engineer</span>
+                      <span className="text-[11px] text-zinc-400">Data Science Trainee</span>
                     </div>
                     <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full text-[11px] text-emerald-400 font-medium">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -416,82 +822,340 @@ export default function App() {
 
         {/* PROFESSIONAL EXPERIENCE & ARCHITECTURE WALKTHROUGH */}
         <section id="experience" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-3 flex flex-col gap-8">
+          {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <Activity size={20} className="text-indigo-400" />
+                <Workflow size={22} className="text-indigo-400" />
               </div>
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Professional Experience</h3>
-                <p className="text-xs sm:text-sm text-zinc-400">High-volume production deployments and machine learning outcomes</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Professional Experience & Architecture Walkthrough</h3>
+                <p className="text-xs sm:text-sm text-zinc-400">Data Science Trainee · Data Cleaning, Preprocessing & Enterprise System Designing</p>
               </div>
             </div>
             <span className="text-xs font-mono text-zinc-400 bg-white/5 px-3.5 py-1.5 rounded-full border border-white/5 w-fit">
-              Aug 2025 - Jan 2026
+              Aug 2025 – Jan 2026
             </span>
           </div>
 
-          <div className="flex flex-col gap-6">
+          {/* Role & Company Overview */}
+          <div className="flex flex-col gap-4 bg-zinc-950/60 p-5 sm:p-6 rounded-2xl border border-white/10">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
-                <p className="text-sm text-indigo-400 font-semibold mt-0.5">Data Scientist & AI Systems Trainee</p>
-              </div>
-              <span className="text-xs text-zinc-400 font-mono">Financial Technology / Real Estate Asset AI</span>
-            </div>
-
-            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-4xl">
-              Architected and deployed an enterprise multimodal RAG platform converting millions of unstructured high-value mortgage covenants, commercial leases, and title deeds into deterministic, machine-readable JSON schemas.
-            </p>
-
-            {/* Interactive 3-Stage Pipeline Switcher */}
-            <div className="bg-zinc-950/70 rounded-2xl border border-white/10 p-5 sm:p-7 flex flex-col gap-6 shadow-inner">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
-                  <Layers size={16} className="text-indigo-400" />
-                  <span className="text-xs sm:text-sm font-semibold text-white">System Architecture Inspector</span>
-                </div>
-                <span className="text-[11px] font-mono text-zinc-400">Click a stage to inspect pipeline specs</span>
-              </div>
-
-              {/* Stage selector tabs */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {pipelineSteps.map((step, idx) => (
-                  <button
-                    key={step.num}
-                    type="button"
-                    onClick={() => setActivePipelineStep(idx)}
-                    className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${activePipelineStep === idx
-                      ? 'border-indigo-500/50 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.15)]'
-                      : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
-                      }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-mono text-indigo-400 font-bold">Stage {step.num}</span>
-                      {activePipelineStep === idx && <span className="w-2 h-2 rounded-full bg-indigo-400" />}
-                    </div>
-                    <div className="text-sm font-bold text-white line-clamp-1">{step.title}</div>
-                    <div className="text-xs text-zinc-400 font-mono mt-1">{step.latency}</div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Active Stage Details */}
-              <div className="p-4 sm:p-5 rounded-xl bg-zinc-900/60 border border-white/5 flex flex-col gap-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-xs font-mono text-indigo-300 font-semibold">
-                    Toolchain: {pipelineSteps[activePipelineStep].model}
-                  </span>
-                  <span className="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                    Verified in Production
+                  <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
+                  <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                    Production Experience
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                  {pipelineSteps[activePipelineStep].details}
+                <p className="text-sm text-indigo-400 font-semibold mt-1">
+                  Data Science Trainee — Data Cleaning & System Design Specialist
                 </p>
               </div>
             </div>
+            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-5xl">
+              Specialized in engineering robust end-to-end data cleaning pipelines (sparse missing value imputation, sensor/image normalization, outlier filtering, and PII sanitization) and designing production cloud AI architectures across 5 mission-critical tasks spanning Healthcare, Autonomous Robotics, and Industrial Computer Vision.
+            </p>
           </div>
+
+          {/* 5-Task Selector Tabs */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider font-semibold">
+                Select Enterprise Design Task (1 – 5):
+              </span>
+              <span className="text-xs font-mono text-indigo-400">
+                Active: {architectureTasks[activeTaskIndex].taskNum} · {architectureTasks[activeTaskIndex].domain}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+              {architectureTasks.map((task, idx) => {
+                const TaskIcon = task.icon;
+                const isActive = activeTaskIndex === idx;
+                return (
+                  <button
+                    key={task.id}
+                    type="button"
+                    onClick={() => setActiveTaskIndex(idx)}
+                    className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
+                      isActive
+                        ? 'border-indigo-500/60 bg-indigo-500/15 text-white shadow-[0_0_20px_rgba(99,102,241,0.2)]'
+                        : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono font-bold text-indigo-400">{task.taskNum}</span>
+                      <TaskIcon size={16} className={isActive ? 'text-indigo-400' : 'text-zinc-500'} />
+                    </div>
+                    <div className="text-xs font-bold text-white line-clamp-1">{task.title}</div>
+                    <span className="text-[10px] font-mono text-zinc-400">{task.domain}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active Task Banner & Deliverable Mode Switcher */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-zinc-950/80 p-5 rounded-2xl border border-white/10 shadow-inner">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-indigo-400 font-bold bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/20">
+                  {architectureTasks[activeTaskIndex].taskNum} · {architectureTasks[activeTaskIndex].domain}
+                </span>
+                <span className="text-xs text-zinc-400 font-mono hidden sm:inline">
+                  Scenario: {architectureTasks[activeTaskIndex].scenario}
+                </span>
+              </div>
+              <h4 className="text-lg sm:text-xl font-bold text-white mt-1">
+                {architectureTasks[activeTaskIndex].title}
+              </h4>
+            </div>
+
+            {/* Deliverable Mode Toggle */}
+            <div className="flex items-center bg-zinc-900 p-1 rounded-xl border border-white/10 self-start lg:self-auto text-xs font-medium">
+              <button
+                type="button"
+                onClick={() => setDeliverableMode('diagram')}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  deliverableMode === 'diagram'
+                    ? 'bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                Architecture Diagram
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeliverableMode('summary')}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  deliverableMode === 'summary'
+                    ? 'bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                1-Page Summary
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeliverableMode('both')}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  deliverableMode === 'both'
+                    ? 'bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                Combined Blueprint
+              </button>
+            </div>
+          </div>
+
+          {/* DELIVERABLE 1: ARCHITECTURE DIAGRAM (Data -> Model -> Cloud -> Dashboard/Edge) */}
+          {(deliverableMode === 'diagram' || deliverableMode === 'both') && (
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <Layers size={16} className="text-indigo-400" />
+                  <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                    Deliverable: Interactive End-to-End Architecture Diagram
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-zinc-400">
+                  Data → Preprocessing → Model → Cloud → Deployment → Monitoring
+                </span>
+              </div>
+
+              {/* 6-Stage Connected Flow Pipeline */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+                {architectureTasks[activeTaskIndex].diagram.map((node) => {
+                  const NodeIcon = node.icon;
+                  const isCleaningStage = node.num === '02';
+                  return (
+                    <div
+                      key={node.num}
+                      className={`relative p-4 rounded-xl border flex flex-col justify-between gap-3 transition-all ${
+                        isCleaningStage
+                          ? 'border-indigo-500/50 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.15)]'
+                          : 'border-white/10 bg-zinc-900/50'
+                      }`}
+                    >
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span
+                            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                              isCleaningStage
+                                ? 'bg-indigo-500/30 text-indigo-200 border border-indigo-500/40'
+                                : 'bg-white/5 text-zinc-400 border border-white/5'
+                            }`}
+                          >
+                            Step {node.num}
+                          </span>
+                          <NodeIcon size={16} className={isCleaningStage ? 'text-indigo-400' : 'text-zinc-400'} />
+                        </div>
+                        <div className="text-xs font-bold text-white">{node.stage}</div>
+                        {isCleaningStage && (
+                          <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 w-fit">
+                            ★ Trainee Specialty
+                          </span>
+                        )}
+                        <span className="text-[11px] font-mono text-indigo-300 font-semibold">{node.tech}</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-300 leading-relaxed border-t border-white/5 pt-2">
+                        {node.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* DELIVERABLE 2: 1-PAGE SUMMARY (Problem + Solution + Outcomes) */}
+          {(deliverableMode === 'summary' || deliverableMode === 'both') && (
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <FileText size={16} className="text-indigo-400" />
+                  <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+                    Deliverable: 1-Page Executive Summary (Problem + Solution Design + Outcomes)
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 w-fit">
+                  Verified Engineering Spec
+                </span>
+              </div>
+
+              {/* 4-Card Structured Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                {/* Card 1: Problem Identification */}
+                <div className="p-5 sm:p-6 rounded-2xl bg-zinc-900/60 border border-red-500/20 flex flex-col gap-3 shadow-inner">
+                  <div className="flex items-center gap-2 text-red-400 text-xs font-mono font-bold uppercase tracking-wider">
+                    <AlertTriangle size={15} />
+                    <span>01 · Problem Identification</span>
+                  </div>
+                  <h5 className="text-sm sm:text-base font-bold text-white">
+                    {architectureTasks[activeTaskIndex].problem.headline}
+                  </h5>
+                  <ul className="flex flex-col gap-2 mt-1">
+                    {architectureTasks[activeTaskIndex].problem.bottlenecks.map((b, bIdx) => (
+                      <li key={bIdx} className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2 leading-relaxed">
+                        <span className="text-red-400 font-bold mt-0.5">•</span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Card 2: Data Cleaning & Preprocessing (Abhishek's Trainee Specialty) */}
+                <div className="p-5 sm:p-6 rounded-2xl bg-zinc-900/60 border border-indigo-500/30 flex flex-col gap-3 shadow-inner">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-indigo-400 text-xs font-mono font-bold uppercase tracking-wider">
+                      <Filter size={15} />
+                      <span>02 · Data Cleaning & Preprocessing</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      Abhishek's Trainee Focus
+                    </span>
+                  </div>
+                  <h5 className="text-sm sm:text-base font-bold text-white">
+                    {architectureTasks[activeTaskIndex].dataCleaning.headline}
+                  </h5>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    {architectureTasks[activeTaskIndex].dataCleaning.description}
+                  </p>
+                  <ul className="flex flex-col gap-2 mt-1 border-t border-white/5 pt-2">
+                    {architectureTasks[activeTaskIndex].dataCleaning.techniques.map((t, tIdx) => (
+                      <li key={tIdx} className="text-xs text-zinc-300 flex items-start gap-2 leading-relaxed">
+                        <span className="text-indigo-400 font-bold mt-0.5">✓</span>
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Card 3: Solution Design (Model + Cloud Services) */}
+                <div className="p-5 sm:p-6 rounded-2xl bg-zinc-900/60 border border-blue-500/20 flex flex-col gap-3 shadow-inner">
+                  <div className="flex items-center gap-2 text-blue-400 text-xs font-mono font-bold uppercase tracking-wider">
+                    <Cpu size={15} />
+                    <span>03 · Solution Design & Cloud Infrastructure</span>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <div>
+                      <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
+                        Data Collection Layer:
+                      </span>
+                      <p className="text-xs text-zinc-200 mt-0.5">
+                        {architectureTasks[activeTaskIndex].solutionDesign.collection}
+                      </p>
+                    </div>
+                    <div className="border-t border-white/5 pt-2">
+                      <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
+                        AI / ML Model Architecture:
+                      </span>
+                      <p className="text-xs text-zinc-200 font-semibold mt-0.5">
+                        {architectureTasks[activeTaskIndex].solutionDesign.model}
+                      </p>
+                      <p className="text-xs text-zinc-400 mt-0.5">
+                        {architectureTasks[activeTaskIndex].solutionDesign.modelDetails}
+                      </p>
+                    </div>
+                    <div className="border-t border-white/5 pt-2">
+                      <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
+                        Cloud Services & Persistence:
+                      </span>
+                      <p className="text-xs text-indigo-300 font-mono mt-0.5">
+                        {architectureTasks[activeTaskIndex].solutionDesign.cloud}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 4: Deployment, Monitoring & Measurable Outcomes */}
+                <div className="p-5 sm:p-6 rounded-2xl bg-zinc-900/60 border border-emerald-500/20 flex flex-col justify-between gap-4 shadow-inner">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider">
+                      <Activity size={15} />
+                      <span>04 · Deployment, Monitoring & Outcomes</span>
+                    </div>
+                    <div className="flex flex-col gap-2.5">
+                      <div>
+                        <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
+                          Deployment Target:
+                        </span>
+                        <p className="text-xs text-zinc-200 mt-0.5">
+                          {architectureTasks[activeTaskIndex].solutionDesign.deployment}
+                        </p>
+                      </div>
+                      <div className="border-t border-white/5 pt-2">
+                        <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
+                          Monitoring & Automated Alerts:
+                        </span>
+                        <p className="text-xs text-zinc-300 mt-0.5">
+                          {architectureTasks[activeTaskIndex].solutionDesign.monitoring}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Measurable Outcomes Strip */}
+                  <div className="border-t border-white/10 pt-3">
+                    <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-2 font-semibold">
+                      Quantified Deliverable Outcomes:
+                    </span>
+                    <div className="grid grid-cols-3 gap-2">
+                      {architectureTasks[activeTaskIndex].outcomes.map((out, outIdx) => (
+                        <div key={outIdx} className="bg-zinc-950/70 p-2.5 rounded-xl border border-white/5 flex flex-col">
+                          <span className="text-sm sm:text-base font-extrabold text-white font-mono">{out.metric}</span>
+                          <span className="text-[10px] font-bold text-indigo-400">{out.label}</span>
+                          <span className="text-[9px] text-zinc-400 mt-0.5 line-clamp-2">{out.desc}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* CORE TECHNICAL COMPETENCIES */}
