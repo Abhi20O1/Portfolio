@@ -14,11 +14,8 @@ import {
   Star,
   CheckCircle2,
   Copy,
-  Layers,
   ShieldCheck,
-  ArrowUpRight,
-  Filter,
-  Workflow
+  ArrowUpRight
 } from 'lucide-react';
 
 function InteractiveBackground() {
@@ -45,7 +42,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
   const [algoPlatform, setAlgoPlatform] = useState<'hackerrank' | 'leetcode'>('hackerrank');
-  const [activePipelineStep, setActivePipelineStep] = useState<number>(0);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const calendarScrollRef = useRef<HTMLDivElement>(null);
 
@@ -220,30 +216,6 @@ export default function App() {
     fetchProjects();
   }, []);
 
-  const pipelineSteps = [
-    {
-      num: '01',
-      title: 'Vision Ingestion, OCR Cleanup & Table Preprocessing',
-      model: 'Vision Transformer, PaddleOCR & LayoutLMv3',
-      latency: '140ms / page · 99.2% Cell Accuracy',
-      details: 'Segments complex multi-column deed layouts, cleans scanning artifacts and character noise, detects bounding boxes, and reconstructs nested financial tables into validated Markdown and JSON tokens with 99.2% cell accuracy.'
-    },
-    {
-      num: '02',
-      title: 'Hybrid Dense & Sparse Neural Retrieval Engine',
-      model: 'BGE-M3 Dense + BM25 Sparse + Qdrant',
-      latency: '<420ms p95 · 0.941 MRR@10',
-      details: 'Dual-path neural retrieval combining dense 1024-dim semantic embeddings with BM25 inverted lexical indexing, re-scored via a cross-encoder to guarantee high precision across 10M+ legal covenants and financial leases.'
-    },
-    {
-      num: '03',
-      title: 'Constrained Model Inference & AST Validation',
-      model: 'Fine-tuned LLM, Outlines & Pydantic AST',
-      latency: '190ms stream · 0.00% Hallucination',
-      details: 'Applies grammar-constrained guided decoding (Outlines/Pydantic) during token generation to enforce strict JSON schemas and ensure zero hallucinated yields or monetary dates in production contracts.'
-    }
-  ];
-
   return (
     <div className="min-h-screen font-sans selection:bg-indigo-500/30 selection:text-white pb-12">
       <InteractiveBackground />
@@ -412,52 +384,17 @@ export default function App() {
           </div>
         </section>
 
-        {/* PRODUCTION IMPACT METRICS STRIP */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 animate-fade-in-up stagger-2">
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              99.2<span className="text-indigo-400 text-2xl">%</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">OCR & Table Accuracy</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Tested on 10M+ legal deeds</div>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              &lt;420<span className="text-blue-400 text-2xl">ms</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">p95 Query Latency</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Hybrid dense-sparse reranking</div>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              10<span className="text-purple-400 text-2xl">M+</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">Financial Pages Parsed</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Production deeds & covenants</div>
-          </div>
-
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
-            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 tracking-tight">
-              0.00<span className="text-emerald-400 text-2xl">%</span>
-            </div>
-            <div className="text-xs sm:text-sm text-zinc-300 font-medium mt-2">Hallucination Rate</div>
-            <div className="text-[11px] text-zinc-500 mt-0.5">Deterministic AST guardrails</div>
-          </div>
-        </section>
-
-        {/* PROFESSIONAL EXPERIENCE & ARCHITECTURE WALKTHROUGH */}
-        <section id="experience" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-3 flex flex-col gap-8">
+        {/* WORK EXPERIENCE */}
+        <section id="experience" className="glass-panel rounded-[2rem] p-6 sm:p-10 lg:p-12 animate-fade-in-up stagger-2 flex flex-col gap-6 sm:gap-8">
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 shadow-inner">
-                <Activity size={22} className="text-indigo-400" />
+                <Activity size={20} className="text-indigo-400" />
               </div>
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Professional Experience</h3>
-                <p className="text-xs sm:text-sm text-zinc-400">Data Science Trainee · Core Focus: Data Cleaning & System Designing</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Work Experience</h3>
+                <p className="text-xs sm:text-sm text-zinc-400">Professional machine learning & data science experience</p>
               </div>
             </div>
             <span className="text-xs font-mono text-zinc-400 bg-white/5 px-3.5 py-1.5 rounded-full border border-white/5 w-fit">
@@ -465,158 +402,45 @@ export default function App() {
             </span>
           </div>
 
-          {/* Company & Role Overview */}
-          <div className="flex flex-col gap-4 bg-zinc-950/60 p-5 sm:p-6 rounded-2xl border border-white/10">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="text-xl sm:text-2xl font-bold text-white">Arcap REIT AI Solution</h4>
-                  <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                    Production Experience
-                  </span>
-                </div>
-                <p className="text-sm text-indigo-400 font-semibold mt-1">
-                  Data Science Trainee — Data Cleaning & System Design Specialist
-                </p>
+          {/* Experience Entry */}
+          <div className="flex flex-col gap-5 p-6 sm:p-8 rounded-2xl bg-zinc-950/60 border border-white/10 shadow-inner">
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-white/10 pb-4">
+              <div className="flex flex-wrap items-baseline gap-2.5">
+                <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Arcap REIT AI Solution</h4>
+                <span className="text-zinc-500 font-mono hidden sm:inline">|</span>
+                <span className="text-sm sm:text-base text-indigo-400 font-semibold">Data Scientist trainee</span>
               </div>
+              <span className="text-xs font-mono text-zinc-400">
+                Aug 2025 – Jan 2026
+              </span>
             </div>
-            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-5xl">
-              Worked as a Data Science Trainee at Arcap REIT AI Solution focusing on <span className="text-white font-medium">Data Cleaning</span> and <span className="text-white font-medium">System Designing</span> for enterprise multimodal document intelligence. Built automated preprocessing pipelines to ingest, de-noise, and parse millions of unstructured financial and real estate documents (commercial leases, deeds, covenants, rent rolls, and SEC filings), and designed the end-to-end neural retrieval and constrained inference architecture delivering 99.2% extraction accuracy with zero hallucinations.
-            </p>
-          </div>
 
-          {/* Dual Core Pillars: What I Did in This Company */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
-            {/* Pillar 1: Data Cleaning & Tabular Normalization */}
-            <div className="p-6 rounded-2xl bg-zinc-900/50 border border-indigo-500/20 flex flex-col gap-4 shadow-inner">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                <div className="flex items-center gap-2 text-indigo-400 text-xs font-mono font-bold uppercase tracking-wider">
-                  <Filter size={16} />
-                  <span>01 · What I Did: Data Cleaning</span>
-                </div>
-                <span className="text-[10px] font-mono text-indigo-300 bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/20">
-                  Core Responsibility
+            <ul className="flex flex-col gap-3.5 text-zinc-300 text-sm sm:text-base leading-relaxed pt-1">
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 font-bold mt-1 text-base leading-none">●</span>
+                <span>
+                  <strong className="text-white font-semibold">Data Pipeline Development:</strong> Developed automated data cleaning pipelines using Python and R, reducing manual data preparation time by 30%.
                 </span>
-              </div>
-
-              <div>
-                <h5 className="text-base font-bold text-white">
-                  Document Ingestion, OCR Cleanup & Table Preprocessing
-                </h5>
-                <p className="text-xs sm:text-sm text-zinc-400 mt-1 leading-relaxed">
-                  Engineered end-to-end data cleaning and tabular preprocessing pipelines to sanitize, normalize, and extract verified structured representations from messy, multi-column financial documents.
-                </p>
-              </div>
-
-              <ul className="flex flex-col gap-2.5 border-t border-white/5 pt-3">
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-indigo-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">OCR De-Noising & Artifact Removal:</strong> Built cleaning routines to eliminate scanning noise, skew artifacts, and character distortion across bilingual Arabic/English commercial deeds.</span>
-                </li>
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-indigo-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Complex Table Structure Reconstruction:</strong> Decomposed multi-column and nested financial tables, resolved merged cells, and reconstructed tabular data into clean Markdown and JSON tokens with 99.2% cell accuracy.</span>
-                </li>
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-indigo-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Missing Value Imputation & Schema Normalization:</strong> Handled missing covenants and sparse financial fields, standardized divergent date/currency formats, and mapped raw text into unified relational schemas.</span>
-                </li>
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-indigo-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Semantic Chunking & Text Cleaning:</strong> Implemented clause-preserving text chunking strategies to eliminate sentence truncation during legal covenant tokenization.</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Pillar 2: System Designing & Architecture */}
-            <div className="p-6 rounded-2xl bg-zinc-900/50 border border-blue-500/20 flex flex-col gap-4 shadow-inner">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                <div className="flex items-center gap-2 text-blue-400 text-xs font-mono font-bold uppercase tracking-wider">
-                  <Workflow size={16} />
-                  <span>02 · What I Did: System Designing</span>
-                </div>
-                <span className="text-[10px] font-mono text-blue-300 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20">
-                  Core Responsibility
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 font-bold mt-1 text-base leading-none">●</span>
+                <span>
+                  <strong className="text-white font-semibold">Feature Engineering:</strong> Implementing advanced preprocessing techniques including categorical encoding, datetime extraction, and scaling/normalization to optimize data for machine learning models.
                 </span>
-              </div>
-
-              <div>
-                <h5 className="text-base font-bold text-white">
-                  End-to-End Multimodal RAG & Guardrailed System Architecture
-                </h5>
-                <p className="text-xs sm:text-sm text-zinc-400 mt-1 leading-relaxed">
-                  Architected the end-to-end production pipeline from raw multi-format document ingestion to sub-second neural retrieval and zero-hallucination model inference.
-                </p>
-              </div>
-
-              <ul className="flex flex-col gap-2.5 border-t border-white/5 pt-3">
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-blue-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Multi-Stage Ingestion Pipeline:</strong> Designed asynchronous processing stages utilizing Vision Transformers, PaddleOCR, and LayoutLMv3 with a 140ms/page throughput budget.</span>
-                </li>
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-blue-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Hybrid Dense-Sparse Neural Retrieval:</strong> Architected dual-path retrieval indexing combining dense 1024-dim semantic embeddings (BGE-M3) with BM25 inverted lexical indexing for &lt;420ms p95 query latency across 10M+ documents.</span>
-                </li>
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-blue-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Deterministic AST Guardrails:</strong> Designed grammar-constrained guided decoding (Outlines/Pydantic) during token generation to enforce strict JSON schemas, guaranteeing 0.00% hallucination on financial numbers and covenant dates.</span>
-                </li>
-                <li className="text-xs sm:text-sm text-zinc-300 flex items-start gap-2.5 leading-relaxed">
-                  <span className="text-blue-400 font-bold mt-0.5">✓</span>
-                  <span><strong className="text-white font-medium">Scalable Microservice Design:</strong> Structured modular FastAPI microservices with vector database caching (Qdrant/pgvector) and pipeline telemetry.</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Interactive 3-Stage Pipeline Switcher */}
-          <div className="bg-zinc-950/70 rounded-2xl border border-white/10 p-5 sm:p-7 flex flex-col gap-6 shadow-inner">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2">
-                <Layers size={16} className="text-indigo-400" />
-                <span className="text-xs sm:text-sm font-semibold text-white">System Architecture Inspector</span>
-              </div>
-              <span className="text-[11px] font-mono text-zinc-400">Click a stage to inspect pipeline specifications</span>
-            </div>
-
-            {/* Stage selector tabs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {pipelineSteps.map((step, idx) => (
-                <button
-                  key={step.num}
-                  type="button"
-                  onClick={() => setActivePipelineStep(idx)}
-                  className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${
-                    activePipelineStep === idx
-                      ? 'border-indigo-500/50 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.15)]'
-                      : 'border-white/5 bg-zinc-900/40 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono text-indigo-400 font-bold">Stage {step.num}</span>
-                    {activePipelineStep === idx && <span className="w-2 h-2 rounded-full bg-indigo-400" />}
-                  </div>
-                  <div className="text-sm font-bold text-white line-clamp-1">{step.title}</div>
-                  <div className="text-xs text-zinc-400 font-mono mt-1">{step.latency}</div>
-                </button>
-              ))}
-            </div>
-
-            {/* Active Stage Details */}
-            <div className="p-4 sm:p-5 rounded-xl bg-zinc-900/60 border border-white/5 flex flex-col gap-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-mono text-indigo-300 font-semibold">
-                  Toolchain: {pipelineSteps[activePipelineStep].model}
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 font-bold mt-1 text-base leading-none">●</span>
+                <span>
+                  <strong className="text-white font-semibold">ML System Architecture:</strong> Designing end-to-end cloud-based AI architecture using AWS (S3, SageMaker) and Azure for scenarios like Patient Risk Prediction.
                 </span>
-                <span className="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                  Verified in Production
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 font-bold mt-1 text-base leading-none">●</span>
+                <span>
+                  <strong className="text-white font-semibold">Model Deployment:</strong> Deployed Random Forest and CNN models via Flask, ensuring scalability and monitoring.
                 </span>
-              </div>
-              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                {pipelineSteps[activePipelineStep].details}
-              </p>
-            </div>
+              </li>
+            </ul>
           </div>
         </section>
 
