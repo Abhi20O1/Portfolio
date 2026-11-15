@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GitHubCalendar, type Activity as GitHubActivity } from 'react-github-calendar';
+import { GitHubCalendar } from 'react-github-calendar';
 import {
   Mail,
   MessageCircle,
