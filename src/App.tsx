@@ -61,16 +61,18 @@ export default function App() {
     const el = calendarScrollRef.current;
     if (!el) return;
 
-    const scrollToLatest = () => {
-      el.scrollLeft = el.scrollWidth;
+    const centerCalendar = () => {
+      if (el.scrollWidth > el.clientWidth) {
+        el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+      }
     };
 
-    scrollToLatest();
-    const observer = new MutationObserver(scrollToLatest);
+    centerCalendar();
+    const observer = new MutationObserver(centerCalendar);
     observer.observe(el, { childList: true, subtree: true });
 
     return () => observer.disconnect();
-  },);
+  }, []);
 
   const handleEmailSubmit = () => {
     if (!contactName) return setFormError("Please enter your name!");
@@ -280,7 +282,7 @@ export default function App() {
                   Abhishek Singh
                 </h1>
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold gradient-text tracking-tight mt-2 sm:mt-3">
-                  AI & Data Scientist
+                  AI Engineer & Data Scientist
                 </h2>
               </div>
 
@@ -684,13 +686,17 @@ export default function App() {
             </div>
           )}
 
-          {/* GitHub Contribution Calendar (Latest 180 Days) */}
-          <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 flex flex-col gap-4">
+          {/* GitHub Contribution Calendar */}
+          <div className="p-6 sm:p-8 rounded-2xl bg-zinc-950/80 border border-white/10 flex flex-col items-center justify-center gap-4 shadow-inner">
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>GitHub Contribution Stream · @Abhi20O1</span>
+            </div>
             <div
               ref={calendarScrollRef}
-              className="w-full overflow-x-auto no-scrollbar pb-2"
+              className="w-full overflow-x-auto no-scrollbar pb-2 flex justify-start sm:justify-center items-center"
             >
-              <div className="min-w-[700px] sm:min-w-fit">
+              <div className="flex justify-center items-center mx-auto w-fit">
                 <GitHubCalendar
                   username="Abhi20O1"
                   colorScheme="dark"
@@ -722,8 +728,7 @@ export default function App() {
               <MapPin size={20} className="text-amber-400" />
             </div>
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Education & Foundation</h3>
-              <p className="text-xs sm:text-sm text-zinc-400">Formal training in mathematics, statistics, and computer science</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Education</h3>
             </div>
           </div>
 

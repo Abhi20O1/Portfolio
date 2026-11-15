@@ -122,3 +122,22 @@ body {
 .animate-fade-in-up.is-visible.stagger-4 { transition-delay: 0.2s; }
 .animate-fade-in-up.is-visible.stagger-5 { transition-delay: 0.25s; }
 .animate-fade-in-up.is-visible.stagger-6 { transition-delay: 0.3s; }
+
+/* GitHub Activity Calendar Centering */
+.react-activity-calendar {
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.react-activity-calendar svg {
+  margin: 0 auto !important;
+}
+
+.react-activity-calendar footer {
+  margin: 0 auto !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
