@@ -40,7 +40,6 @@ interface GitHubRepo {
 export default function App() {
   const [projects, setProjects] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [calendarRange, setCalendarRange] = useState<'6months' | 'year'>('6months');
   const [algoPlatform, setAlgoPlatform] = useState<'hackerrank' | 'leetcode'>('hackerrank');
   const [copiedEmail, setCopiedEmail] = useState(false);
   const calendarScrollRef = useRef<HTMLDivElement>(null);
@@ -50,7 +49,7 @@ export default function App() {
   const [contactMessage, setContactMessage] = useState("");
   const [formError, setFormError] = useState("");
 
-  const email = "as2001abhi@gmail.com";
+  const email = "abhi28031@gmail.com";
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email);
@@ -78,7 +77,7 @@ export default function App() {
     observer.observe(el, { childList: true, subtree: true });
 
     return () => observer.disconnect();
-  }, [calendarRange]);
+  },);
 
   const handleEmailSubmit = () => {
     if (!contactName) return setFormError("Please enter your name!");
@@ -696,28 +695,6 @@ export default function App() {
 
           {/* GitHub Contribution Calendar (Latest 180 Days) */}
           <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span className="text-sm font-semibold text-white">Recent Contribution Velocity (Last 6 Months)</span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setCalendarRange('6months')}
-                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${calendarRange === '6months' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
-                    }`}
-                >
-                  6 Months
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCalendarRange('year')}
-                  className={`text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer ${calendarRange === 'year' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-zinc-400 hover:text-white'
-                    }`}
-                >
-                  Full Year
-                </button>
-              </div>
-            </div>
-
             <div
               ref={calendarScrollRef}
               className="w-full overflow-x-auto no-scrollbar pb-2"
@@ -726,7 +703,6 @@ export default function App() {
                 <GitHubCalendar
                   username="Abhi20O1"
                   colorScheme="dark"
-                  transformData={calendarRange === '6months' ? selectLastHalfYear : undefined}
                   labels={{
                     totalCount: '{{count}} contributions in recent cycle'
                   }}
